@@ -1,0 +1,29 @@
+.DS_Store
+.idea/
+*.iml
+.vscode/
+
+# Java
+**/target/
+**/.gradle/
+**/build/
+*.class
+*.jar
+*.war
+*.log
+
+# Node / React
+**/node_modules/
+**/.vite/
+**/dist/
+
+# Android
+**/.cxx/
+**/local.properties
+**/*.apk
+**/*.aab
+
+# iOS
+**/Pods/
+**/*.xcworkspace
+**/DerivedData/
