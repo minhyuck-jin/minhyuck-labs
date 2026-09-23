@@ -1,12 +1,18 @@
 # minhyuck-labs
 
-개인 연습용 모노레포입니다. 직무 기준으로 폴더를 나눕니다.
+개인 저장소.
 
-| 폴더 | 직무 | 현재 |
-|------|------|------|
-| `backend/java` | 백엔드 | Java (예정) |
-| `frontend/react` | 프론트엔드 | React (예정) |
-| `android` | 안드로이드 | 나중에 |
-| `ios` | iOS | 나중에 |
+## 레이아웃
 
-IntelliJ / Cursor는 이 저장소 루트를 열면 됩니다.
+| 경로 | 용도 |
+|------|------|
+| `backend/java` | 백엔드 (Java, 예정) |
+| `frontend/react` | 프론트엔드 (React, 예정) |
+| `android` | 안드로이드 (나중에) |
+| `ios` | iOS (나중에) |
+| `docs/` | 소개, 경력, 프로젝트 요약 |
+| `.ai/` | 에이전트용 규칙·도메인. 구현 근거 |
+
+사람용 문서는 [`docs/`](docs/README.md) 를 본다.
+
+IntelliJ / Cursor / Claude / Copilot 은 저장소 **루트**를 연다. 에이전트 입구는 `AGENTS.md` 다.
