@@ -15,23 +15,21 @@
 | Java | toolchain 25 |
 | 앱 version | `0.0.1-SNAPSHOT` (`build.gradle`) |
 
-## 실행
+## Spring Boot 4 (이 앱)
 
-```bash
-cd backend/java/labs-api
-./gradlew bootRun
-./gradlew test
-```
+- REST: **`spring-boot-starter-webmvc`** (Boot 3 `spring-boot-starter-web` 예제 그대로 금지)
+- JSON: Jackson 3 — Boot 4 기본. Java 스타일·Lombok 등: `.ai/rules/java.md`
 
-로컬 기본 포트: **8080**
+## 실행·빌드 명령
 
-## 종속성 (Initializr)
+**`./gradlew` · docker compose** 는 **`backend/java/labs-api/AGENTS.md` 「Build & test」** 만 둔다 (중복 금지).
 
-- Spring Web MVC (`spring-boot-starter-webmvc`)
-- Validation
-- Actuator
-- Lombok, configuration-processor
-- SpringDoc OpenAPI (`springdoc-openapi-starter-webmvc-ui` 3.1.0)
+- HTTP **8080**. Postgres: `docker-compose.yml` (기본 `localhost:5432/labs_api`).
+- Profile **local**: Postgres + Flyway. **test**: H2 + Flyway (`./gradlew test`, CI).
+
+## Gradle 의존성
+
+**단일 출처:** `backend/java/labs-api/build.gradle` (주석 규칙: 같은 모듈 `AGENTS.md`).
 
 ## HTTP (현재)
 
@@ -43,9 +41,19 @@ cd backend/java/labs-api
 
 REST 비즈니스 API는 아직 없음. 추가 시 `.ai/rules/api.md` 를 따른다 (URI `/v1` 접두사 없음).
 
+## DB · MyBatis · Flyway
+
+- **PostgreSQL** (`docker-compose.yml`). **JPA 없음.** 영속은 **MyBatis** 만.
+- **Flyway:** `src/main/resources/db/migration/V*.sql`. migration 파일명·수정 금지: `.ai/rules/sql.md`.
+- **local** profile: Postgres. **test** profile: H2 in-memory (`./gradlew test`, CI). 동일 Flyway migration.
+- **테스트:** `@SpringBootTest` + `test` profile — H2 + Flyway (`.ai/rules/testing.md` 범위 **이 앱 예외**).
+- 설정: `application.yaml` `mapper-locations: classpath*:com/minhyuck/labs/**/mapper/*.xml`, `map-underscore-to-camel-case: true`
+- `build.gradle` `sourceSets`: `src/main/java/**/*.xml` classpath
+- `@MapperScan("com.minhyuck.labs")`, 인터페이스 `@Mapper`
+
 ## 아직 없음
 
-- DB, JPA/MyBatis, `sql.md` 대상 스키마
+- SQLite·폰 싱크 상세
 - Spring Security / OAuth
 - Kafka 등 메시징
 - Spring Cloud
@@ -67,22 +75,20 @@ REST 비즈니스 API는 아직 없음. 추가 시 `.ai/rules/api.md` 를 따른
 
 `application-prod.yaml` 은 prod 배포 준비 시 추가한다.
 
-## 패키지 구조 (feature · MSA 지향)
+## 패키지 (feature · MSA 지향)
 
-Base: **`com.minhyuck.labs`**. **업무별 `{domain}`** + **`controller` / `service`**. HTTP 패키지는 **`web` 아님 → `controller`**.
+업무 **`{domain}`** 경계는 추후 서비스 분리 후보. 도메인 폐기 시 **`{domain}` 패키지 삭제**.
 
 ```text
 com.minhyuck.labs
 ├── LabsApiApplication.java
-├── config/                    전역 Spring 설정
-├── common/                    여러 도메인 공통 (예외 handler, 공통 오류 DTO 등)
-└── {domain}/                  업무 단위 (ping, …). URI 자원명과 맞춤
-    ├── controller/
-    └── service/
+├── config/                    전역 @Configuration
+├── common/                    여러 도메인 횡단 (예외 handler, 공통 DTO 등). 업무 Service·Controller 금지
+└── {domain}/                  URI 자원명과 맞춤 (소문자)
+    ├── controller/            HTTP — 패키지명 `web` 금지
+    ├── service/
+    └── mapper/                *Mapper.java + *Mapper.xml (같은 폴더). XML namespace = interface FQCN
 ```
 
-- **MSA:** 지금은 단일 `labs-api` JAR. `{domain}` 경계는 **추후 서비스 분리 후보**로 본다.
-- **common:** 업무 Service·Controller 금지. 횡단·공유 기술만.
-- **영속:** `{domain}.mapper` 등 도메인 하위 (Repository 레이어 패키지 기본 없음).
-
-상세: `.ai/rules/java.md` 「패키지 (feature · MSA 지향)」.
+- 호출: **`{domain}.controller` → `{domain}.service` → Mapper**
+- **Repository** 패키지 레이어는 두지 않는다. 영속은 `{domain}.mapper` (Service 가 Mapper 주입)

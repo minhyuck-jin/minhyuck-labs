@@ -1,46 +1,15 @@
-# Java 기술 규칙
+# Java 기술 규칙 (공통)
 
-Java / Spring 코드에 적용한다.
+Java / Spring **코드 스타일**에 적용한다.
+**Boot 버전, base package, 패키지 트리, DB·MyBatis** 등 **앱·모듈 전용**은 `.ai/projects/{앱}.md` 와 해당 모듈 `AGENTS.md` 에만 둔다. 이 파일에 넣지 않는다.
+
 언어 무관 안전 규칙은 `quality.md`, HTTP 메서드·URI 설계는 `api.md` 를 따른다.
 
-## Spring Boot 4 (labs-api)
+## Spring (공통)
 
-`backend/java/labs-api` 는 Spring Boot **4.x**, Java toolchain **25** 를 쓴다.
-
-- REST: **`spring-boot-starter-webmvc`** (Boot 3 의 `spring-boot-starter-web` 예제를 그대로 가져오지 않는다)
-- JSON: Boot 4 기본 **Jackson 3** (`tools.jackson` 계열). 튜토리얼의 Jackson 2 `ObjectMapper` 수동 `@Bean` 을 기본으로 두지 않는다
-- JSON 커스터마이즈가 필요하면 Boot 4 의 **`JsonMapperBuilderCustomizer`** (예전 `Jackson2ObjectMapperBuilderCustomizer` 아님) 를 쓴다
-- 마이그레이션 세부: [Spring Boot 4.0 Migration Guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
-
-## 패키지 (feature · MSA 지향 — labs-api)
-
-`backend/java/labs-api` 는 **업무(도메인)별 패키지**로 나눈다. 한 JVM 모노리스이지만, 패키지 경계는 **나중 MSA 서비스 분리**를 염두에 둔다.
-
-### 트리
-
-```text
-com.minhyuck.labs
-├── LabsApiApplication.java
-├── config/                 앱 전역 @Configuration (Jackson, OpenAPI 등)
-├── common/                 도메인 **공통** (아래 규칙)
-└── {domain}/               업무별 (예: ping, order). 소문자, api.md URI 자원명과 맞춤
-    ├── controller/         @RestController, *RequestDto, *ResponseDto
-    └── service/            @Service
-```
-
-- HTTP 어댑터 패키지 이름은 **`controller`** 를 쓴다. **`web` 패키지명은 쓰지 않는다.**
-- **Repository 레이어 패키지는 기본으로 두지 않는다.** 영속이 필요하면 `{domain}.service` 가 Mapper·Spring Data 포트를 직접 쓴다. Mapper 클래스는 `{domain}.mapper` 등 **그 도메인 아래**에 둔다.
-
-### common
-
-- **여러 도메인**에서 쓰는 **기술·횡단** 코드만 둔다 (예: `@RestControllerAdvice`, 공통 오류 DTO, 공통 상수).
-- **특정 업무 규칙·Service·Controller** 는 `common` 에 두지 않는다. 한 도메인만 쓰면 `{domain}` 아래에 둔다.
-- `common` 이 비대해지면 도메인으로 내리거나, 사용자와 나눌지 정한다.
-
-### 흐름
-
-- 기본 호출: **`{domain}.controller` → `{domain}.service`**
-- 요청 없는 추상 상위 클래스·범용 util 남발은 하지 않는다 (`common.md` 와 같음).
+- Boot 4 계열 REST 예제의 `spring-boot-starter-web` 를 그대로 쓰지 않고, 프로젝트가 정한 web starter(예: webmvc)를 따른다.
+- Boot 4 JSON 기본은 **Jackson 3** (`tools.jackson`). Jackson 2 `ObjectMapper` 수동 `@Bean` 을 기본으로 두지 않는다. 커스터마이즈는 **`JsonMapperBuilderCustomizer`**.
+- Boot 4 마이그레이션: [Spring Boot 4.0 Migration Guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
 
 ## 이름
 - 접미사: `Controller`, `Service`, `Dto`
@@ -48,7 +17,6 @@ com.minhyuck.labs
 - 메서드 파라미터·지역변수: `requestDto` / `responseDto` (`request`, `response` 단독 금지)
 - 컬렉션 변수: `{단수}List` (예: `userList`). 복수형 변수명(`users`)은 쓰지 않는다
 - 패키지 이름은 소문자만 쓴다. 언더스코어·대문자로 단어를 나누지 않는다
-- 패키지 루트는 애플리케이션을 만들 때 정한다
 
 ## 값 다루기
 - 문자열이 비었는지는 `isBlank` 계열, 객체·컬렉션은 `isEmpty` 계열로 확인한다. `== null` 단독 비교를 기본으로 쓰지 않는다

@@ -1,0 +1,20 @@
+# labs-api PostgreSQL
+#
+# Postgres Docker 컨테이너 기동·중지
+#   기동: docker compose up -d
+#   중지 (DB 데이터 유지): docker compose down
+#   중지 (DB 데이터 삭제): docker compose down -v
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: labs_api
+      POSTGRES_USER: labs
+      POSTGRES_PASSWORD: labs
+    ports:
+      - '5432:5432'
+    volumes:
+      - labs-api-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  labs-api-postgres-data:

@@ -1,3 +1,8 @@
 spring:
   application:
     name: labs-api
+
+mybatis:
+  mapper-locations: classpath*:com/minhyuck/labs/**/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

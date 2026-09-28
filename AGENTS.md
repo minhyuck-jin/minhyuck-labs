@@ -45,10 +45,12 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 | `backend/**` Java·Spring | `java.md` |
 | `frontend/**` React | `react.md` |
 | HTTP API 설계·구현 | `api.md` |
-| SQL·DB·스키마 (DB 정한 뒤) | `sql.md` |
+| SQL·DB·스키마 | `sql.md` (공통) + **해당 앱** `.ai/projects/{앱}.md` |
 | 테스트 작성·수정 | `testing.md` |
 | Git 조작·push·작업 마무리 | `git.md` |
 | 특정 앱·도메인 | `.ai/projects/{앱}.md` (있을 때만) |
+
+`.ai/rules/` 에 앱 전용(경로, JPA 유무, Postgres 등)을 쓰지 않는다. 층 구분: `common.md` 「`.ai` 규칙 층」.
 
 ### 근거
 - **구현·분석 근거는 코드와 `.ai` 뿐**이다. `README.md`, `docs/` 는 근거로 쓰지 않는다.
@@ -105,6 +107,20 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 - 저장소 전체를 훑지 않는다. 관련 파일에서 시작해 호출 관계를 따라간다.
 - 광범위한 조사가 필요하면 서브에이전트에 위임해 메인 대화 컨텍스트를 아낀다.
 - 파일 경로는 줄이지 않고 전체 경로로 적는다. 경로 중간에 말줄임을 넣지 않는다.
+
+## 하네스 수정 후 검증 (필수 — 사용자에게 묻기 전)
+
+`.ai/` · `AGENTS.md` · nested `AGENTS.md` · `.cursor/rules/` 를 **수정·생성한 작업**은 **완료 보고 전** 아래를 **직접** 수행한다. “나중에”·“물어보면” 하지 않는다.
+
+1. **층 위반:** `.ai/rules/` 에 앱 경로·base package·DB 종류·JPA/MyBatis/Flyway **앱 선택**·`@MapperScan` 등 **앱 전용**이 없는지 grep (`labs-api`, `com.minhyuck`, `backend/java/labs-api` 등).
+2. **중복:** 같은 스택·패키지·실행 명령·DB 설정이 **두 파일 이상**에 **본문**으로 있지 않은지 확인. 역할 분리:
+   - `projects/{앱}.md` — 앱 스택·패키지·DB·설정 **본문(단일 출처)**
+   - `{모듈}/AGENTS.md` — `./gradlew`·모듈 convention·**projects 로 포인터** (스택 본문 복붙 금지)
+   - `.ai/rules/` — 공통만. `README.md` — 사람용 요약(필요 시 projects 와 동기화)
+3. **읽기 순서:** `AGENTS.md` 표·nested AGENTS Read 목록·`README.md` 인덱스가 바뀐 파일과 **일치**하는지 확인.
+4. **지적 반영:** 사용자·리뷰 지적은 **같은 작업**에서 하네스·`KNOWLEDGE.md` 에 남긴다.
+
+검증 결과를 작업 마무리에 **확인함** / **수정함** 으로 한 줄 적는다.
 
 ## 지적된 실수·학습
 

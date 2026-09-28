@@ -18,17 +18,38 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs 'src/main/java'
+            include '**/*.xml'
+        }
+    }
+}
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0'
+    /* Spring Boot */
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'        // REST API (Tomcat 포함)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'    // Validation
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'      // 헬스체크
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0'    // Swagger UI
+
+    /* DB */
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'            // DataSource
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:4.0.0'    // MyBatis
+    implementation 'org.springframework.boot:spring-boot-starter-flyway'          // Flyway
+    runtimeOnly 'org.postgresql:postgresql'                                       // Postgres 드라이버
+
+    /* Lombok · 설정 메타데이터 */
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+
+    /* Test */
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'        // REST API (Tomcat 포함)
+    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'    // Validation
+    testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'      // 헬스체크
+    testRuntimeOnly 'com.h2database:h2'                                                  // Test profile in-memory
     testCompileOnly 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
