@@ -1,0 +1,22 @@
+---
+description: backend/java — labs-api Spring Boot 4, Java 25. Read java.md and api.md when editing HTTP or Java sources.
+globs: backend/java/**
+alwaysApply: false
+---
+
+# backend/java (Cursor 보조)
+
+Copilot·Claude Code 는 이 파일을 쓰지 않는다. 공통 규칙은 `AGENTS.md` 와 `.ai/rules/` 이다.
+
+## Read
+
+- `backend/java/labs-api/AGENTS.md` — 이 모듈의 `./gradlew test`, `bootRun`
+- `.ai/rules/java.md` — `{domain}/controller` → `{domain}/service`, `common` 횡단만, Lombok, Dto 네이밍
+- HTTP API 작업 시 `.ai/rules/api.md` — URI `/v1` 없음
+
+## Stack (labs-api)
+
+- Spring Boot 4.1.1, `spring-boot-starter-webmvc`, Validation, Actuator, SpringDoc
+- Package root: `com.minhyuck.labs`
+
+규칙 전문은 `.ai/rules/` 에만 둔다. 여기서 복사하지 않는다.

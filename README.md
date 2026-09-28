@@ -25,4 +25,4 @@ cd backend/java/labs-api
 
 사람용 문서는 [`docs/`](docs/README.md) 를 본다.
 
-IntelliJ / Cursor / Claude / Copilot 은 저장소 **루트**를 연다. 에이전트 입구는 `AGENTS.md` 다. 앱 도메인은 `.ai/projects/labs-api.md` 다.
+IntelliJ / Cursor / Claude / Copilot 은 저장소 **루트**를 연다. 전역 입구는 `AGENTS.md` 다. `labs-api` 작업 시 `backend/java/labs-api/AGENTS.md` 와 `.ai/projects/labs-api.md` 를 본다.

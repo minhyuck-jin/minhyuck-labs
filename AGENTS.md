@@ -3,10 +3,21 @@
 이 저장소의 에이전트 규칙 입구다. Cursor·Claude Code·GitHub Copilot 모두 이 파일에서 시작한다.
 
 ## 도구 입구
-- Cursor: 이 파일
-- Claude Code: `CLAUDE.md` → 이 파일
+- Cursor: 이 파일 (+ 선택 `.cursor/rules/*.mdc` — Cursor 전용, 다른 도구는 무시)
+- Claude Code: `CLAUDE.md` → 이 파일 (앱 폴더는 해당 `AGENTS.md` / `CLAUDE.md`)
 - GitHub Copilot: `.github/copilot-instructions.md` → 이 파일
 - 규칙은 도구별 파일에 복사하지 않는다. 원본은 `.ai/rules/` 와 이 파일이다.
+
+## 앱 (monorepo)
+
+`backend/**` · `frontend/**` 등 **실행 가능한 앱**이 있으면, 그 경로의 **nested `AGENTS.md`** 를 먼저 읽는다 (빌드·test 명령은 앱 파일에만 둔다).
+
+| 경로 | 모듈 AGENTS | 도메인 (`.ai/projects/`) |
+|------|-------------|----------------------------|
+| `backend/java/labs-api` | `backend/java/labs-api/AGENTS.md` | `labs-api.md` |
+| `frontend/react` | (앱 생기면 추가) | (생기면) |
+
+루트 이 파일은 **전역** 규칙·읽기 순서·지도다. 앱별 `./gradlew` 등은 nested 파일을 따른다.
 
 ## Read-before-write (코드·하네스 수정 전)
 
@@ -55,6 +66,21 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 - 테스트·빌드·린트 “통과”는 **실제로 실행한 경우만** 적는다.
 - 확인한 범위(예: 변경 파일, 특정 모듈)를 함께 적는다.
 
+## 작업 완료 (Definition of done)
+
+`backend/java/labs-api` 의 Java·설정·Gradle 을 바꾼 작업은 **완료·merge 가능**이라고 말하기 전에 아래 중 하나를 만족한다.
+
+1. 모듈 루트에서 **`./gradlew test`** 를 실행했고, **확인함**으로 보고한다.
+2. GitHub **`labs-api test` workflow** 가 해당 커밋·PR 에서 **green** 이다.
+
+둘 다 아니면 **“통과”, “문제없음”, “테스트 OK”** 를 쓰지 않고 **`미실행: 사유`** 만 쓴다. CI 가 있는데 로그를 보지 않고 통과를 주장하지 않는다.
+
+## 건드리지 말 것
+
+- **커밋·push 금지:** `.env`, `.env.*`, API 키, DB 비밀번호, `**/credentials*`, 기타 비밀을 담은 파일
+- **Git 조작:** `git reset --hard`, force push, hook 우회 — 상세는 `.ai/rules/git.md` 「하지 않는 것」
+- **하네스:** 요청·`.ai/KNOWLEDGE.md` 절차 없이 rules 전체를 다른 파일에 복붙하지 않는다
+
 ## 문서 동기화
 
 폴더 구조, 공개 프로젝트 목록, 하네스 경로가 바뀌면 **같은 작업에서** 루트 `README.md` 와 `docs/` 를 맞춘다.
@@ -68,7 +94,9 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 | `.ai/KNOWLEDGE.md` | 지식 반영·공통 승격 절차 |
 | `.ai/projects/` | AI가 읽는 업무·도메인 |
 | `docs/` | 사람용 (소개, 경력, 프로젝트 요약) |
-| `backend/` `frontend/` `android/` `ios/` | 코드 |
+| `backend/` `frontend/` `android/` `ios/` | 코드 (Java 앱: `backend/java/labs-api/AGENTS.md`) |
+| `.cursor/rules/` | Cursor 전용 glob 규칙 (선택) |
+| `.github/workflows/` | CI (예: `labs-api-test.yml`) |
 
 ## 작업 방식
 

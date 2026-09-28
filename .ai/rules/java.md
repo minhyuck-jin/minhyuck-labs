@@ -3,10 +3,44 @@
 Java / Spring 코드에 적용한다.
 언어 무관 안전 규칙은 `quality.md`, HTTP 메서드·URI 설계는 `api.md` 를 따른다.
 
-## 레이어
-- 기본 흐름은 Controller → Service 다
-- Repository 레이어는 기본으로 두지 않는다. 영속이 필요하면 Service가 저장 포트(Mapper 또는 Spring Data)를 직접 쓴다
-- 요청 없는 공통 모듈·추상 상위 클래스를 만들지 않는다
+## Spring Boot 4 (labs-api)
+
+`backend/java/labs-api` 는 Spring Boot **4.x**, Java toolchain **25** 를 쓴다.
+
+- REST: **`spring-boot-starter-webmvc`** (Boot 3 의 `spring-boot-starter-web` 예제를 그대로 가져오지 않는다)
+- JSON: Boot 4 기본 **Jackson 3** (`tools.jackson` 계열). 튜토리얼의 Jackson 2 `ObjectMapper` 수동 `@Bean` 을 기본으로 두지 않는다
+- JSON 커스터마이즈가 필요하면 Boot 4 의 **`JsonMapperBuilderCustomizer`** (예전 `Jackson2ObjectMapperBuilderCustomizer` 아님) 를 쓴다
+- 마이그레이션 세부: [Spring Boot 4.0 Migration Guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
+
+## 패키지 (feature · MSA 지향 — labs-api)
+
+`backend/java/labs-api` 는 **업무(도메인)별 패키지**로 나눈다. 한 JVM 모노리스이지만, 패키지 경계는 **나중 MSA 서비스 분리**를 염두에 둔다.
+
+### 트리
+
+```text
+com.minhyuck.labs
+├── LabsApiApplication.java
+├── config/                 앱 전역 @Configuration (Jackson, OpenAPI 등)
+├── common/                 도메인 **공통** (아래 규칙)
+└── {domain}/               업무별 (예: ping, order). 소문자, api.md URI 자원명과 맞춤
+    ├── controller/         @RestController, *RequestDto, *ResponseDto
+    └── service/            @Service
+```
+
+- HTTP 어댑터 패키지 이름은 **`controller`** 를 쓴다. **`web` 패키지명은 쓰지 않는다.**
+- **Repository 레이어 패키지는 기본으로 두지 않는다.** 영속이 필요하면 `{domain}.service` 가 Mapper·Spring Data 포트를 직접 쓴다. Mapper 클래스는 `{domain}.mapper` 등 **그 도메인 아래**에 둔다.
+
+### common
+
+- **여러 도메인**에서 쓰는 **기술·횡단** 코드만 둔다 (예: `@RestControllerAdvice`, 공통 오류 DTO, 공통 상수).
+- **특정 업무 규칙·Service·Controller** 는 `common` 에 두지 않는다. 한 도메인만 쓰면 `{domain}` 아래에 둔다.
+- `common` 이 비대해지면 도메인으로 내리거나, 사용자와 나눌지 정한다.
+
+### 흐름
+
+- 기본 호출: **`{domain}.controller` → `{domain}.service`**
+- 요청 없는 추상 상위 클래스·범용 util 남발은 하지 않는다 (`common.md` 와 같음).
 
 ## 이름
 - 접미사: `Controller`, `Service`, `Dto`
