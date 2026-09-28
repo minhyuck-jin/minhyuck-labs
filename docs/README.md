@@ -6,6 +6,6 @@
 
 | 파일 | 내용 |
 |------|------|
-| (예정) `about.md` | 소개 |
-| (예정) `career.md` | 경력 |
-| (예정) `projects.md` | 공개해도 되는 프로젝트 요약 |
+| `about.md` | TO-DO |
+| `career.md` | TO-DO |
+| `projects.md` | TO-DO |

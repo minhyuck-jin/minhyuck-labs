@@ -10,12 +10,16 @@
 
 ## 앱 (monorepo)
 
-`backend/**` · `frontend/**` 등 **실행 가능한 앱**이 있으면, 그 경로의 **nested `AGENTS.md`** 를 먼저 읽는다 (빌드·test 명령은 앱 파일에만 둔다).
+`backend/**` · `frontend/**` · `mobile/**` 등 **실행 가능한 앱**이 있으면, 그 경로의 **nested `AGENTS.md`** 를 먼저 읽는다 (빌드·test 명령은 앱 파일에만 둔다).
 
 | 경로 | 모듈 AGENTS | 도메인 (`.ai/projects/`) |
 |------|-------------|----------------------------|
 | `backend/java/labs-api` | `backend/java/labs-api/AGENTS.md` | `labs-api.md` |
-| `frontend/react` | (앱 생기면 추가) | (생기면) |
+| `frontend/react` | TO-DO | TO-DO |
+| `mobile/android` | TO-DO | TO-DO |
+| `mobile/ios` | TO-DO | TO-DO |
+
+미구현 앱·문서는 `생기면`·`예정` 대신 **TO-DO** 만 쓴다 (`README.md`, `docs/`, 이 표).
 
 루트 이 파일은 **전역** 규칙·읽기 순서·지도다. 앱별 `./gradlew` 등은 nested 파일을 따른다.
 
@@ -96,7 +100,7 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 | `.ai/KNOWLEDGE.md` | 지식 반영·공통 승격 절차 |
 | `.ai/projects/` | AI가 읽는 업무·도메인 |
 | `docs/` | 사람용 (소개, 경력, 프로젝트 요약) |
-| `backend/` `frontend/` `android/` `ios/` | 코드 (Java 앱: `backend/java/labs-api/AGENTS.md`) |
+| `backend/` `frontend/` `mobile/` | 코드 (Java 앱: `backend/java/labs-api/AGENTS.md`) |
 | `.cursor/rules/` | Cursor 전용 glob 규칙 (선택) |
 | `.github/workflows/` | CI (예: `labs-api-test.yml`) |
 
