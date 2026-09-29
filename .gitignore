@@ -1,4 +1,5 @@
 .DS_Store
+.handoff.md
 .idea/
 *.iml
 .vscode/

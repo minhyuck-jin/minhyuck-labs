@@ -8,7 +8,7 @@ Copilot·Claude Code 는 이 파일을 쓰지 않는다. 공통 규칙은 `AGENT
 
 ## Read
 
-- `backend/java/labs-api/AGENTS.md` — `./gradlew test`, `bootRun` (local profile)
+- `backend/java/labs-api/AGENTS.md` — `./gradlew test`, `bootRun`
 - `.ai/projects/labs-api.md` — DB·MyBatis·Flyway·Postgres (앱 스택)
 - `.ai/rules/java.md` — Lombok·Dto·코드 스타일 (패키지는 `labs-api.md`)
 - SQL·스키마: `.ai/rules/sql.md` + `labs-api.md`

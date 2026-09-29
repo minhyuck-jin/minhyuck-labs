@@ -23,6 +23,27 @@
 
 루트 이 파일은 **전역** 규칙·읽기 순서·지도다. 앱별 `./gradlew` 등은 nested 파일을 따른다.
 
+## New PC / dev bootstrap
+
+트리거: 새 PC, clone 직후, 로컬 개발 환경 세팅 요청.
+
+| 항목 | 사실 |
+|------|------|
+| Floor | JDK 25 + Docker 엔진 Running. clone 만으로 JDK·Docker 는 설치되지 않는다 |
+| Postgres | `.ai/projects/labs-api.md` 「DB · MyBatis · Flyway」 |
+| 스크립트 | `scripts/setup.sh` (macOS/Linux), `scripts/setup.ps1` (Windows) |
+| 설치 파일 | Git 에 두지 않는다. brew / winget / 공식 설치 |
+| 막힘 | Docker Desktop 첫 실행·EULA·관리자 권한은 사용자 개입. 스크립트가 다음 액션을 출력하면 거기서 멈춘다 |
+
+순서:
+
+1. 이 섹션 + `backend/java/labs-api/AGENTS.md` + `.ai/projects/labs-api.md` Read
+2. OS 에 맞는 `scripts/setup.sh` 또는 `scripts/setup.ps1` 실행 (JDK·Docker 검사, 가능하면 설치 시도, `./gradlew test`)
+3. Docker 엔진 Running 확인 후 로컬 Run 은 nested AGENTS 「Build & test」
+4. 설치 바이너리를 커밋하지 않는다
+
+복붙 프롬프트 (사람용 위치: 루트 `README.md` Setup Guide). 구현 근거는 이 섹션과 `.ai` 이다.
+
 ## Read-before-write (코드·하네스 수정 전)
 
 파일을 **수정·생성·삭제**하기 **전**, 그 턴의 **첫 도구 호출**은 Read 이어야 한다.
@@ -91,6 +112,7 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 
 폴더 구조, 공개 프로젝트 목록, 하네스 경로가 바뀌면 **같은 작업에서** 루트 `README.md` 와 `docs/` 를 맞춘다.
 기능이 의미 있게 바뀌면 `.ai/projects/` 와 `docs/` 해당 소개만 최신화한다. 요청 없는 홍보 문구는 쓰지 않는다.
+`README.md` 의 `Version`·`History` 는 사용자가 요청할 때만 올린다.
 
 ## 레이아웃
 
@@ -102,7 +124,9 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 | `docs/` | 사람용 (소개, 경력, 프로젝트 요약) |
 | `backend/` `frontend/` `mobile/` | 코드 (Java 앱: `backend/java/labs-api/AGENTS.md`) |
 | `.cursor/rules/` | Cursor 전용 glob 규칙 (선택) |
-| `.github/workflows/` | CI (예: `labs-api-test.yml`) |
+| `.cursor/hooks.json`, `.claude/settings.json` | 하네스 점검 강제 hook |
+| `scripts/` | 로컬 개발 환경 세팅 (`setup.sh`, `setup.ps1`), 하네스 점검 (`harness/`) |
+| `.github/workflows/` | CI (예: `labs-api-test.yml`, `harness-check.yml`) |
 
 ## 작업 방식
 
@@ -112,19 +136,34 @@ Read 없이 `Write` / `StrReplace` 등 변경 도구를 호출하지 않는다.
 - 광범위한 조사가 필요하면 서브에이전트에 위임해 메인 대화 컨텍스트를 아낀다.
 - 파일 경로는 줄이지 않고 전체 경로로 적는다. 경로 중간에 말줄임을 넣지 않는다.
 
-## 하네스 수정 후 검증 (필수 — 사용자에게 묻기 전)
+## 하네스·일관성 검증 (필수 — 사용자에게 묻기 전)
 
-`.ai/` · `AGENTS.md` · nested `AGENTS.md` · `.cursor/rules/` 를 **수정·생성한 작업**은 **완료 보고 전** 아래를 **직접** 수행한다. “나중에”·“물어보면” 하지 않는다.
+**트리거 중 하나라도** 해당하면 **완료 보고 전** 아래를 **직접** 수행한다. 사용자가 「하네스 점검해」라고 **말할 때까지 기다리지 않는다.**
+
+**트리거:** `.ai/` · `AGENTS.md` · nested `AGENTS.md` · `CLAUDE.md` · `.cursor/rules/` · `README.md` · `docs/` 수정·생성 · **profile·YAML·`build.gradle`·폴더 구조** 변경 · **사용자 지적**(문구·규칙·설정 등).
+**크기 무관:** 한 줄·문구 수정도 트리거다. “작은 수정이라 생략”하지 않는다.
+
+**강제 장치:**
+
+| 장치 | 동작 |
+|------|------|
+| `scripts/harness/check.sh` | 기계 점검 (층 위반, `KNOWLEDGE.md` 섹션, 깨진 경로, 중복 문장, 금지 패턴) |
+| `.cursor/hooks.json`, `.claude/settings.json` | 파일을 수정한 턴 종료 시 점검 지시를 강제로 넣는다. 지시가 오면 생략하지 않는다 |
+| `.github/workflows/harness-check.yml` | push·PR 에서 `check.sh` 실행 |
+
+`check.sh` 가 못 잡는 판단 항목은 아래 1~6 이다.
 
 1. **층 위반:** `.ai/rules/` 에 앱 경로·base package·DB 종류·JPA/MyBatis/Flyway **앱 선택**·`@MapperScan` 등 **앱 전용**이 없는지 grep (`labs-api`, `com.minhyuck`, `backend/java/labs-api` 등).
 2. **중복:** 같은 스택·패키지·실행 명령·DB 설정이 **두 파일 이상**에 **본문**으로 있지 않은지 확인. 역할 분리:
    - `projects/{앱}.md` — 앱 스택·패키지·DB·설정 **본문(단일 출처)**
    - `{모듈}/AGENTS.md` — `./gradlew`·모듈 convention·**projects 로 포인터** (스택 본문 복붙 금지)
    - `.ai/rules/` — 공통만. `README.md` — 사람용 요약(필요 시 projects 와 동기화)
-3. **읽기 순서:** `AGENTS.md` 표·nested AGENTS Read 목록·`README.md` 인덱스가 바뀐 파일과 **일치**하는지 확인.
-4. **지적 반영:** 사용자·리뷰 지적은 **같은 작업**에서 하네스·`KNOWLEDGE.md` 에 남긴다.
+3. **일치:** `AGENTS.md` · nested `AGENTS.md` · `.cursor/rules/*.mdc` · `projects/{앱}.md` · **실제 파일**(YAML 등)이 **같은 사실**인지 grep·Read. **옛 profile·삭제된 경로**가 남지 않았는지 본다.
+4. **파일 성격:** 적은 내용이 그 파일 역할에 맞는지 본다. 역할 표: `.ai/KNOWLEDGE.md` 「지적 반영」. `KNOWLEDGE.md` 는 절차만, 사실·규칙 본문 금지.
+5. **하네스 문장:** `.ai/projects/` · `AGENTS.md` 에 **변명·홍보·대화체**를 넣지 않았는지 본다. **표·짧은 사실·금지**만.
+6. **지적 반영:** 사용자·리뷰 지적은 `.ai/KNOWLEDGE.md` 「지적 반영」 절차를 같은 턴에 수행한다.
 
-검증 결과를 작업 마무리에 **확인함** / **수정함** 으로 한 줄 적는다.
+검증 결과를 작업 마무리에 **확인함** / **수정함** 으로 한 줄 적는다. 이 한 줄이 없으면 완료가 아니다.
 
 ## 지적된 실수·학습
 

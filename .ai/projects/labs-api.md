@@ -24,8 +24,7 @@
 
 **`./gradlew` · docker compose** 는 **`backend/java/labs-api/AGENTS.md` 「Build & test」** 만 둔다 (중복 금지).
 
-- HTTP **8080**. Postgres: `docker-compose.yml` (기본 `localhost:5432/labs_api`).
-- Profile **local**: Postgres + Flyway. **test**: H2 + Flyway (`./gradlew test`, CI).
+- HTTP **8080**. 로컬 Postgres: 아래 「DB · MyBatis · Flyway」.
 
 ## Gradle 의존성
 
@@ -43,10 +42,11 @@ REST 비즈니스 API는 아직 없음. 추가 시 `.ai/rules/api.md` 를 따른
 
 ## DB · MyBatis · Flyway
 
-- **PostgreSQL** (`docker-compose.yml`). **JPA 없음.** 영속은 **MyBatis** 만.
+- **PostgreSQL** (모듈 `docker-compose.yml`, `localhost:5432/labs_api`). **JPA 없음.** 영속은 **MyBatis** 만.
+- **로컬 DB 기동:** `developmentOnly` `spring-boot-docker-compose`. 전제: Docker 엔진 Running. Boot 기동 시 Compose up, 종료 시 stop (volume 유지). 호스트 Postgres 설치는 쓰지 않는다.
 - **Flyway:** `src/main/resources/db/migration/V*.sql`. migration 파일명·수정 금지: `.ai/rules/sql.md`.
-- **local** profile: Postgres. **test** profile: H2 in-memory (`./gradlew test`, CI). 동일 Flyway migration.
-- **테스트:** `@SpringBootTest` + `test` profile — H2 + Flyway (`.ai/rules/testing.md` 범위 **이 앱 예외**).
+- **test** profile: H2 in-memory (`./gradlew test`, CI). Compose off (아래 「설정」). 그 외 Postgres. 동일 Flyway migration.
+- **테스트:** `@SpringBootTest` + `test` profile — H2 + Flyway (`testing.md`의 단위 테스트 규칙과 별도).
 - 설정: `application.yaml` `mapper-locations: classpath*:com/minhyuck/labs/**/mapper/*.xml`, `map-underscore-to-camel-case: true`
 - `build.gradle` `sourceSets`: `src/main/java/**/*.xml` classpath
 - `@MapperScan("com.minhyuck.labs")`, 인터페이스 `@Mapper`
@@ -60,20 +60,15 @@ REST 비즈니스 API는 아직 없음. 추가 시 `.ai/rules/api.md` 를 따른
 
 정하면 이 파일과 `application.yaml` 을 같은 작업에서 갱신한다.
 
-## 설정
+## 설정 (profile)
 
-- `src/main/resources/application.yaml`
-- 프로필·비밀은 env / 외부 설정 (YAML에 비밀 넣지 않음)
+| 파일 | role |
+|------|------|
+| `application.yaml` | Postgres(env), MyBatis, SpringDoc on, DEBUG logging, Actuator `health`+`prometheus` |
+| `application-test.yaml` | H2, CI, `spring.docker.compose.enabled: false` |
+| `application-prod.yaml` | SpringDoc off, INFO logging |
 
-## 운영 (prod) 정책
-
-로컬·dev 에서는 SpringDoc·Actuator 를 켜도 된다. **prod 프로필** 을 만들 때 같은 작업에서 아래를 반영한다.
-
-- **SpringDoc:** `springdoc.api-docs.enabled=false`, `springdoc.swagger-ui.enabled=false`
-- **Actuator:** 노출 endpoint 는 **최소**(예: health 만). 세부는 배포 환경 정할 때 이 절을 한 줄로 고정한다
-- **비밀:** prod YAML·Git 에 API 키·DB URL·비밀번호를 넣지 않는다 (env / Secrets)
-
-`application-prod.yaml` 은 prod 배포 준비 시 추가한다.
+설정 추가 시 위 역할을 지킨다. 비밀은 YAML·Git 에 넣지 않고 env 만. `prod`: `--spring.profiles.active=prod`.
 
 ## 패키지 (feature · MSA 지향)
 

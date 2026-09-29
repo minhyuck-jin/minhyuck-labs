@@ -1,0 +1,5 @@
+# pattern<TAB>reason
+# Fixed-string match across the repo. Add a line when a user correction can be caught mechanically.
+setup-dev	scripts renamed to scripts/setup.sh / setup.ps1
+application-local	local profile removed; default is application.yaml
+spring.profiles.active=local	local profile removed; default is application.yaml

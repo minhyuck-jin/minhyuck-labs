@@ -1,30 +1,34 @@
 # AGENTS.md — labs-api
 
 `backend/java/labs-api` Gradle 모듈 전용 에이전트 입구다.
-저장소 전역 규칙은 **`../../AGENTS.md`** 와 **`.ai/rules/`** 이다.
+저장소 전역 규칙은 **`../../../AGENTS.md`** 와 **`.ai/rules/`** 이다.
 
 ## Build & test (this module)
 
 모듈 루트(`backend/java/labs-api`)에서:
 
 ```bash
-docker compose up -d
-./gradlew bootRun --args='--spring.profiles.active=local'
+./gradlew bootRun
 ./gradlew test
 ```
 
-스택·DB·패키지·profile **본문:** `../../.ai/projects/labs-api.md` (여기에 복사하지 않는다).
+- **로컬 Run 전제:** Docker 엔진 Running. DB 기동 방식: `../../../.ai/projects/labs-api.md` 「DB · MyBatis · Flyway」.
+- **IntelliJ Run/Debug:** Gradle 위임 실행 (`developmentOnly` 가 classpath 에 포함되어야 Compose 연동).
+- **test / CI:** `./gradlew test` (profile `test`).
+- **폴백:** Compose 연동을 끈 경우 `docker compose up -d` 후 `./gradlew bootRun`.
+
+스택·DB·패키지·profile **본문:** `../../../.ai/projects/labs-api.md` (여기에 복사하지 않는다).
 
 ## 이 모듈을 수정할 때 Read
 
 1. 이 파일
-2. `../../AGENTS.md` (Read-before-write, 검증 보고)
-3. `../../.ai/rules/common.md`, `../../.ai/rules/quality.md`
-4. `../../.ai/rules/java.md` — Java·Spring 코드
-5. SQL·DB·스키마: `../../.ai/rules/sql.md` + `../../.ai/projects/labs-api.md`
-6. HTTP API 추가·변경 시 `../../.ai/rules/api.md`
+2. `../../../AGENTS.md` (Read-before-write, 검증 보고)
+3. `../../../.ai/rules/common.md`, `../../../.ai/rules/quality.md`
+4. `../../../.ai/rules/java.md` — Java·Spring 코드
+5. SQL·DB·스키마: `../../../.ai/rules/sql.md` + `../../../.ai/projects/labs-api.md`
+6. HTTP API 추가·변경 시 `../../../.ai/rules/api.md`
 
-`.ai/rules/` 전체를 읽지 않는다. 인덱스: `../../.ai/rules/README.md`
+`.ai/rules/` 전체를 읽지 않는다. 인덱스: `../../../.ai/rules/README.md`
 
 ## build.gradle `dependencies` 주석
 
@@ -35,10 +39,10 @@ docker compose up -d
 
 ## CI
 
-push·PR 시 GitHub **labs-api test** workflow 가 `./gradlew test` 를 실행한다. 작업 완료 기준: `../../AGENTS.md` 「작업 완료」.
+push·PR 시 GitHub **labs-api test** workflow 가 `./gradlew test` 를 실행한다. 작업 완료 기준: `../../../AGENTS.md` 「작업 완료」.
 
 ## 하지 않는 것
 
 - 이 폴더에 **새 Git 저장소** 만들지 않는다 (루트 `.git` 만)
-- `../../.ai/projects/labs-api.md` 에 없는 **새 starter·의존성** 을 요청 없이 추가하지 않는다
+- `../../../.ai/projects/labs-api.md` 에 없는 **새 starter·의존성** 을 요청 없이 추가하지 않는다
 - `README.md`, `docs/` 를 구현 근거로 쓰지 않는다

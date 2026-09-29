@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "command": "bash scripts/harness/hook-mark.sh",
+        "timeout": 10
+      }
+    ],
+    "stop": [
+      {
+        "command": "bash scripts/harness/hook-stop.sh cursor",
+        "timeout": 60,
+        "loop_limit": 3
+      }
+    ]
+  }
+}
