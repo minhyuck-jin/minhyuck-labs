@@ -40,6 +40,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'            // DataSource
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:4.0.0'    // MyBatis
     implementation 'org.springframework.boot:spring-boot-starter-flyway'          // Flyway
+    runtimeOnly 'org.flywaydb:flyway-database-postgresql'                         // Flyway 12+ Postgres dialect
     runtimeOnly 'org.postgresql:postgresql'                                       // Postgres 드라이버
 
     /* Lombok · 설정 메타데이터 */

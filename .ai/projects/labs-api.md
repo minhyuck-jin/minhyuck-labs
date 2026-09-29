@@ -44,7 +44,7 @@ REST 비즈니스 API는 아직 없음. 추가 시 `.ai/rules/api.md` 를 따른
 
 - **PostgreSQL** (모듈 `docker-compose.yml`, `localhost:5432/labs_api`). **JPA 없음.** 영속은 **MyBatis** 만.
 - **로컬 DB 기동:** `developmentOnly` `spring-boot-docker-compose`. 전제: Docker 엔진 Running. Boot 기동 시 Compose up, 종료 시 stop (volume 유지). 호스트 Postgres 설치는 쓰지 않는다.
-- **Flyway:** `src/main/resources/db/migration/V*.sql`. migration 파일명·수정 금지: `.ai/rules/sql.md`.
+- **Flyway:** `src/main/resources/db/migration/V*.sql`. migration 파일명·수정 금지: `.ai/rules/sql.md`. Postgres 런타임은 `flyway-database-postgresql` (Flyway 12+).
 - **test** profile: H2 in-memory (`./gradlew test`, CI). Compose off (아래 「설정」). 그 외 Postgres. 동일 Flyway migration.
 - **테스트:** `@SpringBootTest` + `test` profile — H2 + Flyway (`testing.md`의 단위 테스트 규칙과 별도).
 - 설정: `application.yaml` `mapper-locations: classpath*:com/minhyuck/labs/**/mapper/*.xml`, `map-underscore-to-camel-case: true`
