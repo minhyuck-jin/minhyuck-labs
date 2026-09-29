@@ -32,7 +32,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'        // REST API (Tomcat 포함)
     implementation 'org.springframework.boot:spring-boot-starter-validation'    // Validation
     implementation 'org.springframework.boot:spring-boot-starter-actuator'      // 헬스체크
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'                  // Prometheus registry
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0'    // Swagger UI
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'       // 로컬 Run 시 Docker Compose 자동화 (Postgres 연동)
 
     /* DB */
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'            // DataSource
