@@ -40,7 +40,8 @@
 | OpenAPI JSON | `/labs-api/v3/api-docs` (SpringDoc 기본) |
 | Swagger UI | `/labs-api/swagger-ui/index.html` |
 
-- REST 비즈니스 API는 아직 없음. 추가 시 `.ai/rules/api.md` 를 따른다 (URI `/v1` 접두사 없음).
+- 비즈니스 API: POST 기본 — `.ai/rules/api.md` 「HTTP 메서드」.
+- Envelope: `ApiResponse<T>` (`common.dto.response`). 필드 `data`, `error` (`ApiResponse.Error`: `code`, `message`). 오류: `GlobalExceptionHandler` — bucket **400·404·500** (`badRequestExceptionHandler` → `notFoundExceptionHandler` → `internalServerErrorExceptionHandler`). 프레임워크 `error.code` = bucket `HttpStatus.name()`, message = `e.getMessage()`. 그 외 예외(405·415·`ResponseStatusException` 등)는 **500** bucket. **업무 예외·추가 bucket**은 `{domain}`·Security 등 도입 시. 검증: `ApiResponseWebTest`, `GlobalExceptionHandlerTest` (`src/test`).
 
 ## DB · MyBatis · Flyway
 

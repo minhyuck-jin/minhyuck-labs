@@ -51,6 +51,11 @@
 | 금지 | 내용 |
 | --- | --- |
 | Git | 이 폴더에 새 Git 저장소 만들지 않는다 (루트 `.git`만) |
+| test-only API | envelope·계약 검증만을 위해 `src/main`에 demo Controller 를 두지 않는다. `@WebMvcTest` 스텁은 `src/test` 만. |
+| 빈 package | Java 삭제 후 **빈 package 디렉터리**를 남기지 않는다. (Git 미추적·IDE 잔재) |
+| handler 과분할 | envelope용 `@RestControllerAdvice` 를 resolver·Detail 등 **별도 main 클래스**로 쪼개지 않는다. 매핑은 handler 클래스 **private** |
+| handler 명명 | status bucket 메서드는 `{statusCamelCase}ExceptionHandler`, 매개변수 `Exception e` (`.ai/rules/api.md` 「오류 응답」) |
+| 미사용 업무 예외 | 도메인·API 없이 **업무용 Exception 클래스**를 common 에 미리 만들지 않는다. 도입 시 `{domain}` 과 handler 를 함께 추가 |
 | 의존성 | `.ai/projects/labs-api.md`에 없는 starter·의존성을 요청 없이 추가하지 않는다 |
 | 근거 | `../../../.ai/rules/common.md` 「근거 · 사용자 설명」 |
 
