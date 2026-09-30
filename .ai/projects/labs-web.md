@@ -31,7 +31,7 @@
 
 - **`npm run dev` · `npm run build` · `npm run test`** 는 **`frontend/react/labs-web/AGENTS.md` 「Build & test」** 만 둔다 (중복 금지).
 - dev **5173**, preview 기본 **4173** (Vite preview).
-- 프로덕션 빌드 산출물: `frontend/react/labs-web/dist/`.
+- 프로덕션 빌드 산출물: `npm run build` 후 앱 루트의 dist/ (Git 미추적).
 
 ## 백엔드 연동 (로컬 dev)
 
