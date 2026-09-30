@@ -1,5 +1,12 @@
 # pattern<TAB>reason
-# Fixed-string match across the repo. Add a line when a user correction can be caught mechanically.
+# Fixed-string match in file contents across the repo.
+# Pattern contains `/`: also fail if that path exists (orphan dir/file; check.sh).
 setup-dev	scripts renamed to scripts/setup.sh / setup.ps1
 application-local	local profile removed; default is application.yaml
 spring.profiles.active=local	local profile removed; default is application.yaml
+frontend/labs-web	SPA path is frontend/react/labs-web (stack tier react, same pattern as backend/java/labs-api)
+포맷ter	harness wording: no Korean+English glued in one word; use lint/format or 린트·포맷
+신입 수준 포폴	harness: no career/reader negation; use common.md 환경·스택 positive criteria
+연습용·신입	harness: no career/reader negation in AGENTS or .ai/rules
+타사·실무 레포	harness: avoid implying copying employer/other-company repos; use 외부 템플릿·starter wording
+실무 레포	same as 타사·실무 레포

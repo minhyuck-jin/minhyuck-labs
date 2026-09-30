@@ -8,10 +8,11 @@ minhyuck-labs/
 │   ├── KNOWLEDGE.md            지식 반영·승격 절차
 │   ├── projects/               앱별 도메인·스택
 │   │   ├── labs-api.md             labs-api 앱 도메인·스택
+│   │   ├── labs-web.md             labs-web 앱 도메인·스택
 │   │   └── README.md               앱 목록 인덱스
 │   └── rules/                  공통 코딩 규칙
 │       ├── api.md                  REST·HTTP API
-│       ├── common.md               공통 작업 방식
+│       ├── common.md               공통·환경·스택·하네스 작성
 │       ├── git.md                  Git·버전·검증 보고
 │       ├── java.md                 Java·Spring 스타일
 │       ├── quality.md              품질·안전
@@ -31,12 +32,13 @@ minhyuck-labs/
 │       └── labs-api/               REST API (Spring Boot 4.1, Java 25)
 ├── docs/                   소개, 경력, 프로젝트 정리
 ├── frontend/
-│   └── react/                  TO-DO
+│   └── react/
+│       └── labs-web/           React SPA (Vite, React 19, TypeScript)
 ├── mobile/
 │   ├── android/                TO-DO
 │   └── ios/                    TO-DO
 └── scripts/                로컬 개발 환경 검사·설치 Scripts
-    ├── harness/                하네스 점검 (check.sh, banned.txt, hook 스크립트)
+    ├── harness/                하네스 점검 (`scripts/harness/check.sh`, banned.txt, hook)
     ├── setup.sh                macOS / Linux
     └── setup.ps1               Windows
 ```
@@ -60,6 +62,6 @@ minhyuck-labs/
 
 ## History
 
-| Version | Notes                                      |
-|---------|--------------------------------------------|
-| 0.0.1   | Monorepo layout, harness, labs-api setting |
+| Version | Notes                                              |
+| ------- | -------------------------------------------------- |
+| 0.0.1   | Monorepo layout, harness, labs-api, labs-web setup |

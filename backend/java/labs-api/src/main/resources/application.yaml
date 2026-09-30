@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: /labs-api
+
 spring:
   application:
     name: labs-api

@@ -1,0 +1,16 @@
+---
+description: frontend/react/labs-web — Vite React 19 TypeScript. Read react.md when editing TSX or api modules.
+alwaysApply: false
+---
+# frontend/react/labs-web (Cursor 보조)
+
+공통 규칙은 `AGENTS.md` 와 `.ai/rules/` 이다. harness 양식: `.ai/rules/common.md` 「하네스 작성」.
+
+## Read
+
+- `frontend/react/labs-web/AGENTS.md` — `npm run dev`, `build`, `test`.
+- `.ai/projects/labs-web.md` — Vite, proxy, 포트.
+- `.ai/projects/labs-api.md` — 백엔드 URL·API.
+- `.ai/rules/react.md` — Component·api/ 모듈·상태.
+
+세부 규칙은 `.ai/rules/` 를 Read 한다. 이 파일에 전문을 두지 않는다.

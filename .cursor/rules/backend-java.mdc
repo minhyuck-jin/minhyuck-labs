@@ -8,15 +8,10 @@ Copilot·Claude Code 는 이 파일을 쓰지 않는다. 공통 규칙은 `AGENT
 
 ## Read
 
-- `backend/java/labs-api/AGENTS.md` — `./gradlew test`, `bootRun`
-- `.ai/projects/labs-api.md` — DB·MyBatis·Flyway·Postgres (앱 스택)
-- `.ai/rules/java.md` — Lombok·Dto·코드 스타일 (패키지는 `labs-api.md`)
-- SQL·스키마: `.ai/rules/sql.md` + `labs-api.md`
-- HTTP API: `.ai/rules/api.md` — URI `/v1` 없음
+- `backend/java/labs-api/AGENTS.md` — `./gradlew test`, `bootRun`.
+- `.ai/projects/labs-api.md` — DB·MyBatis·Flyway·Postgres (앱 스택).
+- `.ai/rules/java.md` — Lombok·Dto·코드 스타일 (패키지는 `.ai/projects/labs-api.md`).
+- SQL·스키마: `.ai/rules/sql.md` + `.ai/projects/labs-api.md`.
+- HTTP API: `.ai/rules/api.md` — URI `/v1` 없음.
 
-## Stack (labs-api)
-
-- Spring Boot 4.1.1, webmvc, Validation, Actuator, SpringDoc — 상세·DB는 `labs-api.md`
-- Package root: `com.minhyuck.labs`
-
-규칙 전문은 `.ai/rules/` 에만 둔다. 여기서 복사하지 않는다.
+스택·패키지·DB 본문: `.ai/projects/labs-api.md` 만 Read 한다. 규칙 전문은 `.ai/rules/` 에만 둔다.

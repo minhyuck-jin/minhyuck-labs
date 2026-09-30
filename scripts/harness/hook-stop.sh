@@ -38,6 +38,8 @@ correction_steps="[지적 반영] 이번 턴에 사용자 지적이 있었으면
 3. 규칙이면 KNOWLEDGE.md 표의 해당 파일에 반영
 4. 기계로 잡을 수 있으면 scripts/harness/banned.txt 또는 scripts/harness/check.sh 에 추가"
 
+pending_steps="[Pending] AGENTS.md 「하네스·일관성 검증」Pending. 직전 assistant 턴에서 사용자 미답 질문·선택지가 있으면 ## Pending 블록, 없으면 Pending: 없음 한 줄. 하네스 점검: … 보고 **다음**에 적는다."
+
 if [[ "${dirty}" -eq 1 ]]; then
   check_output="$(bash "${root}/scripts/harness/check.sh" 2>&1)"
   check_status=$?
@@ -48,10 +50,13 @@ ${check_output}
 3. 하네스 파일 전부 Read: AGENTS.md, 모든 nested AGENTS.md·CLAUDE.md, .ai/ 아래 전부, .cursor/rules/, .github/copilot-instructions.md
 4. 판단 점검: 파일 간 중복 본문, 파일 성격(역할 표: .ai/KNOWLEDGE.md), 내용 타당성, 실제 코드·설정과 일치, 옛 경로 잔재
 ${correction_steps}
-마지막에 '하네스 점검: 확인함' 또는 '하네스 점검: 수정함 (무엇)' 한 줄을 보고한다."
+마지막에 '하네스 점검: 확인함' 또는 '하네스 점검: 수정함 (무엇)' 한 줄을 보고한다.
+${pending_steps}"
 else
   message="[지적 반영 점검] 이번 턴에 파일이 바뀌었다.
-${correction_steps}"
+0. 직전 턴 사용자 요청(설명·분석·리뷰 등)에 대한 답이 아직 끝나지 않았거나 hook으로 끊겼으면, 아래 [지적 반영]·Pending **앞에** 그 답을 **다시 보여주거나** 이어서 완료한다. '지적 없음' 한 줄만으로 대체하지 않는다.
+${correction_steps}
+${pending_steps}"
 fi
 
 escaped="$(printf '%s' "${message}" | awk 'BEGIN { ORS = "" } { gsub(/\\/, "\\\\"); gsub(/"/, "\\\""); gsub(/\t/, " "); if (NR > 1) print "\\n"; print }')"

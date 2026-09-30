@@ -1,0 +1,6 @@
+# One sentence per line (exact match after dup normalization). Cross-file and in-file dup checks skip these.
+# Example:
+# Some long allowed duplicate sentence across entry files
+`../../../AGENTS.md` (Read-before-write, 검증 보고)
+`../../../.ai/rules/common.md`, `../../../.ai/rules/quality.md`
+인덱스: `../../../.ai/rules/README.md` (`.ai/rules/` 전체 Read 금지)
