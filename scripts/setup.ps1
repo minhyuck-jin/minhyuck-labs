@@ -2,6 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 $Module = Join-Path $Root "backend/java/labs-api"
+$Web = Join-Path $Root "frontend/react/labs-web"
 
 function Fail([string]$Message) {
     Write-Error "FAIL: $Message"
@@ -47,6 +48,22 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Host "OK: Docker engine is running"
 
+if (-not (Get-Command node -ErrorAction SilentlyContinue) -or -not (Get-Command npm -ErrorAction SilentlyContinue)) {
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        Write-Host "Node.js / npm not on PATH. Trying: winget install OpenJS.NodeJS.LTS -e"
+        winget install OpenJS.NodeJS.LTS -e --accept-package-agreements --accept-source-agreements
+        if ($LASTEXITCODE -ne 0) {
+            Fail "Install Node.js LTS (npm included), open a new terminal, then re-run scripts/setup.ps1"
+        }
+        Fail "Node.js install was requested. Open a new terminal so PATH updates, then re-run scripts/setup.ps1"
+    } else {
+        Fail "Node.js and npm required for labs-web. Install Node.js LTS, then re-run scripts/setup.ps1"
+    }
+}
+
+Write-Host "node: $((node -v 2>&1 | Select-Object -First 1))"
+Write-Host "npm: $((npm -v 2>&1 | Select-Object -First 1))"
+
 Write-Host "== ./gradlew test (H2, compose disabled) =="
 Push-Location $Module
 try {
@@ -58,5 +75,20 @@ try {
     Pop-Location
 }
 Write-Host "OK: gradlew test finished"
-Write-Host "Next: from $Module run .\gradlew.bat bootRun (Docker must stay Running)."
-Write-Host "Check: GET http://localhost:8080/actuator/health"
+
+Write-Host "== labs-web npm ci + npm run test =="
+Push-Location $Web
+try {
+    npm ci
+    if ($LASTEXITCODE -ne 0) { Fail "npm ci failed in labs-web" }
+    npm run test
+    if ($LASTEXITCODE -ne 0) { Fail "npm run test failed in labs-web" }
+} finally {
+    Pop-Location
+}
+Write-Host "OK: labs-web npm run test finished"
+
+Write-Host "Next (API): cd $Module; .\gradlew.bat bootRun (Docker must stay Running)."
+Write-Host "Next (web): cd $Web; npm run dev"
+Write-Host "API health: GET http://localhost:8080/labs-api/actuator/health"
+Write-Host "Full stack: bootRun + dev, then open http://localhost:5173 (Vite proxies /labs-api)."

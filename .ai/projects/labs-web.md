@@ -101,7 +101,7 @@ frontend/react/labs-web/src/
 
 | 파일 | 역할 |
 | --- | --- |
-| `vite.config.ts` | `envDir`, dev server port, `/labs-api` proxy (`loadEnv`), `resolve.alias` `@` → `src` |
+| `vite.config.ts` | `envDir`, dev server port·`open`, `/labs-api` proxy (`loadEnv`), `resolve.alias` `@` → `src` |
 | `frontend/react/labs-web/env/` | dotenv — 「환경」 표 |
 | `frontend/react/labs-web/src/vite-env.d.ts` | `ImportMetaEnv` |
 | `vitest.config.ts` | Vitest (jsdom, setup) |

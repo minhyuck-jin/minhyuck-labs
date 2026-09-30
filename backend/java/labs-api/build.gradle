@@ -21,8 +21,8 @@ repositories {
 sourceSets {
     main {
         resources {
-            srcDirs 'src/main/java'
-            include '**/*.xml'
+            srcDirs = ['src/main/resources', 'src/main/java']
+            exclude '**/*.java'
         }
     }
 }

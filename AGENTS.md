@@ -45,17 +45,18 @@
 
 | 항목 | 값 |
 | --- | --- |
-| Floor | JDK 25 + Docker 엔진 Running. clone만으로 JDK·Docker는 설치되지 않는다 |
+| Floor | JDK 25 + Docker 엔진 Running + Node.js (`npm` on PATH). clone만으로 JDK·Docker·Node는 설치되지 않는다 |
 | Postgres | `.ai/projects/labs-api.md` 「DB · MyBatis · Flyway」 |
+| labs-web | `frontend/react/labs-web/AGENTS.md` 「Build & test」. setup 스크립트는 `npm ci` · `npm run test` 까지 실행한다 |
 | 스크립트 | `scripts/setup.sh` (macOS/Linux), `scripts/setup.ps1` (Windows) |
 | 설치 파일 | Git에 두지 않는다. brew / winget / 공식 설치 |
 | 막힘 | Docker Desktop 첫 실행·EULA·관리자 권한은 사용자 개입. 스크립트가 다음 액션을 출력하면 거기서 멈춘다 |
 
 ### 순서
 
-1. 이 섹션 + `backend/java/labs-api/AGENTS.md` + `.ai/projects/labs-api.md` Read
-2. OS에 맞는 `scripts/setup.sh` 또는 `scripts/setup.ps1` 실행 (JDK·Docker 검사, 가능하면 설치 시도, `./gradlew test`)
-3. Docker 엔진 Running 확인 후 로컬 Run은 nested AGENTS 「Build & test」
+1. 이 섹션 + `backend/java/labs-api/AGENTS.md` + `.ai/projects/labs-api.md` + `frontend/react/labs-web/AGENTS.md` Read
+2. OS에 맞는 `scripts/setup.sh` 또는 `scripts/setup.ps1` 실행 (JDK·Docker·Node/`npm` 검사, 가능하면 설치 시도, `./gradlew test`, labs-web `npm ci` · `npm run test`)
+3. Docker 엔진 Running 확인 후 로컬 Run은 각 앱 nested AGENTS 「Build & test」
 4. 설치 바이너리를 커밋하지 않는다
 
 ### 메타

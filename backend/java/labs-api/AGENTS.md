@@ -22,7 +22,7 @@
 ### 규칙
 
 - 로컬 Run 전제: Docker 엔진 Running. DB: `../../../.ai/projects/labs-api.md` 「DB · MyBatis · Flyway」.
-- IntelliJ Run/Debug: Gradle 위임 (`developmentOnly`가 classpath에 포함).
+- IntelliJ Run/Debug: Gradle 위임 (`developmentOnly`가 classpath에 포함). Spring Boot 구성의 작업 디렉터리는 모듈 루트 (`$MODULE_WORKING_DIR$`).
 - Compose 연동 off 시: `docker compose up -d` 후 `./gradlew bootRun`.
 - 작업 완료: `../../../AGENTS.md` 「작업 완료」.
 

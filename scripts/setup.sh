@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MODULE="${ROOT}/backend/java/labs-api"
+WEB="${ROOT}/frontend/react/labs-web"
 
 fail() {
   echo "FAIL: $*" >&2
@@ -47,8 +48,31 @@ if ! docker info >/dev/null 2>&1; then
 fi
 ok "Docker engine is running"
 
+if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+  if [[ "$(uname -s)" == "Darwin" ]] && command -v brew >/dev/null 2>&1; then
+    echo "Node.js / npm not on PATH. Trying: brew install node"
+    brew install node || fail "Install Node.js (npm included), then re-run scripts/setup.sh"
+  else
+    fail "Node.js and npm required for labs-web. Install from nodejs.org or your package manager, then re-run scripts/setup.sh"
+  fi
+fi
+
+if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+  fail "node or npm still not on PATH after install. Open a new terminal, then re-run scripts/setup.sh"
+fi
+
+echo "node: $(node -v 2>&1)"
+echo "npm: $(npm -v 2>&1)"
+
 echo "== ./gradlew test (H2, compose disabled) =="
 (cd "${MODULE}" && ./gradlew test)
 ok "gradlew test finished"
-echo "Next: from ${MODULE} run ./gradlew bootRun (Docker must stay Running)."
-echo "Check: GET http://localhost:8080/actuator/health"
+
+echo "== labs-web npm ci + npm run test =="
+(cd "${WEB}" && npm ci && npm run test)
+ok "labs-web npm run test finished"
+
+echo "Next (API): cd ${MODULE} && ./gradlew bootRun (Docker must stay Running)."
+echo "Next (web): cd ${WEB} && npm run dev"
+echo "API health: GET http://localhost:8080/labs-api/actuator/health"
+echo "Full stack: bootRun + dev, then open http://localhost:5173 (Vite proxies /labs-api)."
