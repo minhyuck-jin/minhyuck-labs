@@ -47,12 +47,8 @@ dup_normalize_awk='
     print f "\t" line
   }'
 
-all_repo_paths() {
-  find . \( -path ./.git -o -name build -o -name node_modules -o -name .gradle -o -name .idea \) -prune -o -print | sed 's|^\./||'
-}
-
 HARNESS_FILES="$(harness_files)"
-REPO_PATHS="$(all_repo_paths)"
+GIT_FILES="$(git ls-files)"
 
 # 1. layer: .ai/rules must not contain app-specific facts
 while IFS= read -r hit; do
@@ -89,10 +85,23 @@ while IFS= read -r file; do
         continue
       fi
       candidate="${token%/}"
-      if [[ -e "${candidate}" || -e "${dir}/${candidate}" ]]; then
+      resolved=""
+      if [[ -e "${candidate}" ]]; then
+        resolved="${candidate}"
+      elif [[ -e "${dir}/${candidate}" ]]; then
+        resolved="${dir}/${candidate}"
+      fi
+      if [[ -n "${resolved}" ]]; then
+        if git check-ignore -q "${resolved}" 2>/dev/null; then
+          fail "ref" "${file}:${line_no} gitignored path \`${token}\` (absent on CI clone; do not backtick build outputs)"
+          continue
+        fi
         continue
       fi
-      if [[ "${candidate}" != */* ]] && grep -qE "(^|/)${candidate//./\\.}$" <<< "${REPO_PATHS}"; then
+      if [[ "${candidate}" != */* ]] && grep -qE "(^|/)${candidate//./\\.}(/|$)" <<< "${GIT_FILES}"; then
+        continue
+      fi
+      if [[ "${candidate}" == */* ]] && grep -qE "(^|/)${candidate//./\\.}(/|$)" <<< "${GIT_FILES}"; then
         continue
       fi
       fail "ref" "${file}:${line_no} missing path \`${token}\`"

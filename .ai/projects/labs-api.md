@@ -50,7 +50,7 @@
 - **test** profile: H2 in-memory (`./gradlew test`, CI). Compose off (아래 「설정」). 그 외 Postgres. 동일 Flyway migration.
 - **테스트:** `@SpringBootTest` + `test` profile — H2 + Flyway (`.ai/rules/testing.md` 단위 테스트 규칙과 별도).
 - 설정: `application.yaml` `mapper-locations: classpath*:com/minhyuck/labs/**/mapper/*.xml`, `map-underscore-to-camel-case: true`.
-- `build.gradle` `sourceSets`: `src/main/java/**/*.xml` classpath.
+- `backend/java/labs-api/build.gradle` `sourceSets.main.resources`: `backend/java/labs-api/src/main/resources` + `backend/java/labs-api/src/main/java` (`.java` 제외). MyBatis `*Mapper.xml` classpath.
 - `@MapperScan("com.minhyuck.labs")`, 인터페이스 `@Mapper`.
 
 ## 설정 (profile)

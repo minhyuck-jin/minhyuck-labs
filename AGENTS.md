@@ -187,7 +187,7 @@
 
 | 장치 | 동작 |
 | --- | --- |
-| `scripts/harness/check.sh` | 기계 점검 (층 위반, `KNOWLEDGE.md` 섹션, 깨진 경로, 줄 dup, `scripts/harness/semantic-dup.py` **의미 중복**, `### 사실`·rules `### 규칙`, prose 불릿, **표 열 정렬**, 금지 패턴·**금지 경로 존재** (`banned.txt`에 `/` 포함 패턴); `README.md`·`docs/`·`.mdc` 포함) |
+| `scripts/harness/check.sh` | 기계 점검 (층 위반, `KNOWLEDGE.md` 섹션, 백틱 경로·**gitignore 산출물**, `git ls-files` basename, 줄 dup, `scripts/harness/semantic-dup.py` **의미 중복**, `### 사실`·rules `### 규칙`, prose 불릿, **표 열 정렬**, 금지 패턴·**금지 경로 존재** (`banned.txt`에 `/` 포함 패턴); `README.md`·`docs/`·`.mdc` 포함) |
 | `.cursor/hooks.json`, `.claude/settings.json` | 수정 턴 종료 시 점검 지시. 생략하지 않는다 |
 | `.github/workflows/harness-check.yml` | push · PR에서 `check.sh` |
 
