@@ -1,5 +1,5 @@
-@import '@/styles/theme.css';
-@import '@/styles/ui.css';
+@import '@/shared/styles/theme.css';
+@import '@/shared/styles/ui.css';
 
 :root {
   font-family: var(--font-sans);

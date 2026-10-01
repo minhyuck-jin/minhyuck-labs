@@ -42,6 +42,8 @@ Java / Spring **코드 스타일**에 적용한다.
 - 외부 응답을 받는 DTO 는 모르는 필드를 무시한다 (`@JsonIgnoreProperties(ignoreUnknown = true)`).
 - DTO 간 변환은 MapStruct 를 쓰고 생성자 주입으로 받는다. getter/setter 매핑 코드를 길게 직접 쓰지 않는다.
 - springdoc `@Schema` 로 설명을 달았으면 같은 설명을 Javadoc·`//` 로 중복해 쓰지 않는다.
+- record·DTO 의 `@Schema(description)` 은 컴포넌트·필드 **직전** (같은 줄 선두 또는 바로 윗줄). envelope `data`·`error` 는 JSON 키 그대로가 아니라 **의미** (예: 성공 시 결과, 실패 시 오류). `ResponseError` 의 `code`·`message` 는 코드, 메시지. `payload`·`.ai/rules/api.md` 「기계용/사람용」 gloss 는 `@Schema`에 넣지 않는다.
+- record 헤더의 컴포넌트 목록은 생성자 매개변수와 같다. **한 줄에 담기면 한 줄**; 아래 「스타일」의 메서드 시그니처 줄 나눔과 같다.
 
 ## 스타일
 

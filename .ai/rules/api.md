@@ -25,7 +25,7 @@
 | 필드 | 성공 | 실패 |
 | --- | --- | --- |
 | `data` | payload (`T`) 또는 `null` (본문 없음 성공) | `null` |
-| `error` | `null` | `{ "code", "message" }` (`ApiResponse.Error`) |
+| `error` | `null` | `{ "code", "message" }` (`ResponseError`) |
 
 - HTTP status 와 의미를 맞춘다. HTTP 200 바디만으로 실패를 표현하지 않는다.
 - Controller 성공: `ResponseEntity.ok(ApiResponse.ok(responseDto))` 또는 `ApiResponse.ok()` (payload 없음).

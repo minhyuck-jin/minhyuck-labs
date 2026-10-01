@@ -78,24 +78,28 @@ Vite **기본 mode** (`vite` · `vite build` · Vitest `test`). **`--mode` 커�
 frontend/react/labs-web/src/
 ├── main.tsx              Vite 진입 (`index.html` → `/src/main.tsx`)
 ├── App.tsx               루트 조립 (Vite 관례). `<HomePage />` 등
-├── index.css             전역 entry (`main.tsx` import) — `styles/` re-export
-├── styles/               공통 CSS (테마·재사용 클래스). 페이지별 `.css` 없음
-│   ├── theme.css         토큰 (`:root` 변수)
-│   └── ui.css            레이아웃·상태 등 **정해진 class 이름**
+├── index.css             전역 entry (`main.tsx` import) — shared/styles re-export
+├── shared/               횡단 (백 `common` 대응). 업무 코드 금지
+│   ├── assets/           import 정적 파일 (SVG·PNG 등). `@/shared/assets/…`
+│   ├── styles/           공통 CSS (테마·재사용 class). 페이지별 `.css` 없음
+│   │   ├── theme.css     토큰 (`:root` 변수)
+│   │   └── ui.css        레이아웃·상태 등 **정해진 class 이름**
+│   ├── layouts/          전역 틀 (사이드바·AppShell 등). `@/shared/layouts/…`
+│   ├── components/       범용 조합 UI TSX (input+조회 등). `@/shared/components/…`
+│   ├── hooks/            공통 `use*` — JSX 없으면 `.ts`, 훅+전용 UI면 `.tsx` 하나 (예: confirm). `@/shared/hooks/…`
+│   ├── types/            공통 타입만 (예: envelope `ApiResponse`). camelCase 파일명. `@/shared/types/…`
+│   └── api/              envelope·Raw JSON fetch (`apiClient.ts`). 서비스 PATH·env 없음. `@/shared/api/…`
+├── domains/{domain}/     업무 (백 `{domain}` 대응). `{domain}/types/` · `{domain}/api/` 각각 타입·호출 분리
 ├── pages/                화면 TSX (`HomePage.tsx` — `/` 메인·초기 health 데모). 스모크는 `HomePage.test.tsx` colocation
-├── layouts/              (패키지만)
-├── components/           (패키지만)
-├── hooks/                (패키지만)
-├── types/                (패키지만)
-├── api/                  HTTP (`sample.ts` — `import.meta.env` + path. JSX fetch 금지 — react.md)
-└── test/                 Vitest setup
+└── api/                  (임시) health 데모 `sample.ts` — 추후 `domains/{domain}/api/` 로 이전
 ```
 
-- **CSS:** 페이지·컴포넌트 TSX 에 스타일 블록·전용 `.css` import 를 두지 않는다. `frontend/react/labs-web/src/styles/theme.css` · `frontend/react/labs-web/src/styles/ui.css` 에 테마·공통 class 를 모으고, TSX 는 `className` 으로 그 이름만 쓴다. 새 class 가 필요하면 `frontend/react/labs-web/src/styles/` 에 추가한다.
+- **CSS:** 페이지·컴포넌트 TSX 에 스타일 블록·전용 `.css` import 를 두지 않는다. `frontend/react/labs-web/src/shared/styles/theme.css` · `frontend/react/labs-web/src/shared/styles/ui.css` 에 테마·공통 class 를 모으고, TSX 는 `className` 으로 그 이름만 쓴다. 새 class 가 필요하면 `frontend/react/labs-web/src/shared/styles/` 에 추가한다.
 - **`App.tsx`:** 조립만. 전용 App CSS 파일·App.test.tsx 는 두지 않는다. Vitest 는 대상 TSX 옆 `*.test.tsx` (예: `frontend/react/labs-web/src/pages/HomePage.test.tsx`).
-- **패키지:** `layouts/` · `components/` · `hooks/` · `types/` 는 필요 시 채운다.
+- **패키지:** `frontend/react/labs-web/src/shared/layouts` · `frontend/react/labs-web/src/shared/components` · `frontend/react/labs-web/src/shared/hooks` · `frontend/react/labs-web/src/shared/types` · `frontend/react/labs-web/src/shared/api` · `frontend/react/labs-web/src/domains/{domain}/types` · `…/api` 는 필요 시 채운다. 훅 전용 UI는 components 가 아닌 hooks 에 둔다.
+- **파일명:** UI TSX PascalCase (`HomePage.tsx`). 그 외 camelCase (`apiResponse.ts`, `apiClient.ts`). 점 접미사(`*.types.ts`)·kebab 파일명 금지 — `.ai/rules/react.md` 「이름」.
 - **import:** `src/` 아래 TS·TSX 는 **`@/`** 별칭 (`@` → `frontend/react/labs-web/src`). `../` 상대 import 는 쓰지 않는다. CSS entry (`main.tsx` → `@/index.css`) 포함.
-- HTTP 공통 client·core 층은 별도 논의 후 추가.
+- **`frontend/react/labs-web/src/shared/api/apiClient.ts`:** **`VITE_*`·서비스 PATH 없음** — 인자 `url` 은 호출 측이 만든 **브라우저 `fetch` URL**(보통 `import.meta.env.VITE_{서비스id}_API_PATH + '/…'`). 공개 함수 **`fetch*` 접두** (`fetchGetApi`, `fetchPostApi`, `fetchRawJson`). **`fetchGetApi` · `fetchPostApi`** — **표준(공통) API 응답** envelope (`ApiResponse` → `data`, `error` 시 `ApiRequestError`); POST 는 **`requestBody` 필수** (`JSON.stringify`). **`fetchRawJson`** — envelope 밖 **Raw JSON GET** (`.ai/rules/api.md` 「HTTP 메서드」). `RequestInit`·PUT/PATCH/DELETE 는 두지 않는다. PATH·멀티 백엔드 조립은 **`api/`** · **`domains/{domain}/api/`** 만.
 
 ## 설정
 
@@ -104,7 +108,8 @@ frontend/react/labs-web/src/
 | `vite.config.ts` | `envDir`, dev server port·`open`, `/labs-api` proxy (`loadEnv`), `resolve.alias` `@` → `src` |
 | `frontend/react/labs-web/env/` | dotenv — 「환경」 표 |
 | `frontend/react/labs-web/src/vite-env.d.ts` | `ImportMetaEnv` |
-| `vitest.config.ts` | Vitest (jsdom, setup) |
+| `vitest.config.ts` | Vitest (jsdom, `setupFiles` → `vitest.setup.ts`) |
+| `vitest.setup.ts` | Vitest global setup (`@testing-library/jest-dom`) |
 | `eslint.config.js` | ESLint flat (TS, react-hooks, react-refresh) |
 | `prettier.config.js` | Prettier (format; `eslint-config-prettier` 로 충돌 규칙 off) |
 | `package.json` | scripts, version, dependencies |
