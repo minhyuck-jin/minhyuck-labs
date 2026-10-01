@@ -182,6 +182,18 @@
 - `.ai/` · `AGENTS.md` · nested `AGENTS.md` · `CLAUDE.md` · `.cursor/rules/` · `README.md` · `docs/` 수정·생성.
 - **profile** · YAML · `build.gradle` · 폴더 구조 변경.
 - **사용자 지적** (문구·규칙·설정 등).
+- **사용자 push 요청** (커밋·push 직전 — 아래 「Push」).
+
+### Push (사용자 push 요청 시)
+
+push·커밋(create) **전** 아래를 **매번** 수행한다. 기계만 green이고 수동을 grep·diff 샘플로 대체하지 **않는다**.
+
+1. **기계:** `scripts/harness/check.sh` exit 0.
+2. **수동 Read:** `AGENTS.md`, 모든 nested `AGENTS.md`·`CLAUDE.md`, `.ai/` 전부, `.cursor/rules/`, `.github/copilot-instructions.md`, 저장소 **모든** `.md`와 harness `.mdc` (`.ai/rules/common.md` 「하네스 작성」 기준).
+3. **수동 판단:** 위 「`check.sh`가 못 잡는 판단 (1~6)」 **전부**. 항목별로 무엇을 Read·grep·대조했는지 답변에 적는다.
+4. **앱 test:** push에 포함될 변경이 `backend/java/labs-api` · `frontend/react/labs-web` 등 실행 앱이면 해당 nested `AGENTS.md` 「Build & test」 test를 실행한다 (없으면 **미실행: 사유**).
+5. **보고:** `하네스 점검: 확인함` / `수정함` + 수동 1~6 요약. **「수동점검: 확인함」을 Read 없이 쓰지 않는다**.
+6. **push:** 사용자가 요청한 경우에만 `git push` 한다.
 
 ### 강제 장치
 
