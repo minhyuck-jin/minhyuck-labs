@@ -194,6 +194,20 @@ push·커밋(create) **전** 아래를 **매번** 수행한다. 기계만 green�
 4. **앱 test:** push에 포함될 변경이 `backend/java/labs-api` · `frontend/react/labs-web` 등 실행 앱이면 해당 nested `AGENTS.md` 「Build & test」 test를 실행한다 (없으면 **미실행: 사유**).
 5. **보고:** `하네스 점검: 확인함` / `수정함` + 수동 1~6 요약. **「수동점검: 확인함」을 Read 없이 쓰지 않는다**.
 6. **push:** 사용자가 요청한 경우에만 `git push` 한다.
+7. **인수인계:** push **성공 후** 루트 **handoff 파일** (Git 미추적, `.gitignore` 등록)를 **갱신**한다 — 완료·다음 할 일·Pending·선호·마지막 커밋. 새 채팅 안내는 아래 「채팅 인수인계」.
+
+### 채팅 인수인계 (handoff)
+
+| 항목 | 값 |
+| --- | --- |
+| 파일 | 루트 handoff 파일 (`.gitignore`, push 후 갱신) |
+| 이어받기 | handoff 파일이 있고, 사용자 메시지 맥락에 **「인수인계」**가 있으면 이어받는다. 특정 문장에 묶지 않는다 |
+| 에이전트 | handoff 파일 **Read** → 내용으로 맥락 복기 → **같은 턴에 파일 삭제** → handoff의 Pending·「다음」 이어서 작업 |
+
+- 이어받기는 그 파일 내용으로 한다. git log·diff·지난 채팅 기록 조사나 handoff 새로 쓰기·덮어쓰기로 대체하지 않는다.
+- handoff 쓰기·갱신은 위 「Push」 7번(push 성공 후)일 때만 한다.
+- 긴 채팅 대신 **push 단위로 handoff + 새 채팅**을 쓴다. Git·`.ai/`가 사실의 단일 출처이고, handoff는 **대화 맥락만** 잇는다.
+- handoff에 harness **규칙 본문**을 복붙하지 않는다 (포인터·상태만).
 
 ### 강제 장치
 
