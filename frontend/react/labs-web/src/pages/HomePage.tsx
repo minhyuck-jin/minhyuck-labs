@@ -1,8 +1,27 @@
+import { AllCommunityModule, themeQuartz } from 'ag-grid-community'
+import type { ColDef } from 'ag-grid-community'
+import { AgGridReact } from 'ag-grid-react'
 import { useEffect, useState } from 'react'
 
 import { fetchSample } from '@/api/sample'
 
 type DemoStatus = 'loading' | 'up' | 'error'
+
+type SampleRow = {
+  name: string
+  quantity: number
+}
+
+const columnDefs: ColDef<SampleRow>[] = [
+  { field: 'name', headerName: 'Name' },
+  { field: 'quantity', headerName: 'Quantity' },
+]
+
+const rowList: SampleRow[] = [
+  { name: 'Notebook', quantity: 2 },
+  { name: 'Pen', quantity: 5 },
+  { name: 'Eraser', quantity: 1 },
+]
 
 export function HomePage() {
   const [status, setStatus] = useState<DemoStatus>('loading')
@@ -52,6 +71,14 @@ export function HomePage() {
         {status === 'up' && <p className="text-success">{detail}</p>}
         {status === 'error' && <p className="text-error">{detail}</p>}
       </section>
+      <div className="grid-sample">
+        <AgGridReact<SampleRow>
+          modules={[AllCommunityModule]}
+          theme={themeQuartz}
+          rowData={rowList}
+          columnDefs={columnDefs}
+        />
+      </div>
     </main>
   )
 }

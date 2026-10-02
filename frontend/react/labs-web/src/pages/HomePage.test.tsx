@@ -8,11 +8,12 @@ vi.mock('@/api/sample', () => ({
 }))
 
 describe('HomePage', () => {
-  it('renders the app title', () => {
+  it('renders the app title and a sample row', async () => {
     render(<HomePage />)
 
     expect(
       screen.getByRole('heading', { name: 'minhyuck-labs web' }),
     ).toBeInTheDocument()
+    expect(await screen.findByText('Notebook')).toBeInTheDocument()
   })
 })

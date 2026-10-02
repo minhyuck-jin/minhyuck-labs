@@ -5,6 +5,11 @@
   padding: var(--space-page-y) var(--space-page-x);
 }
 
+.grid-sample {
+  height: 24rem;
+  margin-top: 1.5rem;
+}
+
 .text-muted {
   color: var(--color-muted);
   font-size: 0.95rem;

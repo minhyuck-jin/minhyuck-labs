@@ -15,6 +15,7 @@
 | TypeScript | 7.0.2 |
 | Vite | 8.3.1 |
 | Vitest | 3.2.7 |
+| AG Grid | `ag-grid-react` 36.2.0 (`ag-grid-community` 36.2.0, MIT) |
 | Testing Library | `@testing-library/react` 16.x |
 | Lint | ESLint 9 (flat) + Prettier 3 |
 
@@ -90,7 +91,7 @@ frontend/react/labs-web/src/
 │   ├── types/            공통 타입만 (예: envelope `ApiResponse`). camelCase 파일명. `@/shared/types/…`
 │   └── api/              envelope·Raw JSON fetch (`apiClient.ts`). 서비스 PATH·env 없음. `@/shared/api/…`
 ├── domains/{domain}/     업무 (백 `{domain}` 대응). `{domain}/types/` · `{domain}/api/` 각각 타입·호출 분리
-├── pages/                화면 TSX (`HomePage.tsx` — `/` 메인·초기 health 데모). 스모크는 `HomePage.test.tsx` colocation
+├── pages/                화면 TSX (`HomePage.tsx` — `/` health·표 샘플). 스모크는 `HomePage.test.tsx` colocation
 └── api/                  (임시) health 데모 `sample.ts` — 추후 `domains/{domain}/api/` 로 이전
 ```
 
@@ -118,7 +119,7 @@ frontend/react/labs-web/src/
 ## 아직 없음
 
 - 라우터 (React Router 등).
-- UI 라이브러리 (MUI, Tailwind 등).
+- UI 키트 (MUI, Tailwind 등).
 - E2E (Playwright 등).
 - CI workflow.
 
