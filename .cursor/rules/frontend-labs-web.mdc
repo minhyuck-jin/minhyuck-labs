@@ -1,5 +1,5 @@
 ---
-description: frontend/react/labs-web — Vite React 19 TypeScript. Read react.md when editing TSX or api modules.
+description: frontend/react/labs-web — Next.js App Router, React 19 TypeScript. Read react.md when editing TSX or api modules.
 alwaysApply: false
 ---
 # frontend/react/labs-web (Cursor 보조)
@@ -9,7 +9,7 @@ alwaysApply: false
 ## Read
 
 - `frontend/react/labs-web/AGENTS.md` — `npm run dev`, `build`, `test`.
-- `.ai/projects/labs-web.md` — Vite, proxy, 포트.
+- `.ai/projects/labs-web.md` — Next.js, proxy, 포트.
 - `.ai/projects/labs-api.md` — 백엔드 URL·API.
 - `.ai/rules/react.md` — Component·api/ 모듈·상태.
 

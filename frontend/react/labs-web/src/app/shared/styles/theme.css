@@ -1,0 +1,32 @@
+@font-face {
+  font-family: Pretendard;
+  font-style: normal;
+  font-weight: 45 920;
+  font-display: swap;
+  src: url('../../assets/fonts/PretendardVariable.woff2') format('woff2');
+}
+
+:root {
+  --font-sans:
+    Pretendard, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --color-text: #111827;
+  --color-muted: #4b5563;
+  --color-bg: #f9fafb;
+  --color-border: #e5e7eb;
+  --color-success: #047857;
+  --color-error: #b91c1c;
+  --color-surface: #ffffff;
+  --color-hover: #f3f4f6;
+  --color-active: #e0e7ff;
+  --color-backdrop: rgb(17 24 39 / 40%);
+
+  --space-page-x: 1.25rem;
+  --space-page-y: 2rem;
+  --space-panel: 1rem 1.25rem;
+  --radius-panel: 0.5rem;
+  --width-page-max: 40rem;
+  --width-sidebar: 15rem;
+}

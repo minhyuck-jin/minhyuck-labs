@@ -15,9 +15,10 @@ Java / Spring **코드 스타일**에 적용한다.
 ## 이름
 
 - 접미사: `Controller`, `Service`, `Dto`.
-- API 입출력: `{Feature}RequestDto` / `{Feature}ResponseDto`.
+- API 입출력: `{Feature}RequestDto`. 목록 응답은 `{Feature}ListResponseDto`, 원소는 `{Feature}Dto`.
 - 메서드 파라미터·지역변수: `requestDto` / `responseDto` (`request`, `response` 단독 금지).
-- 컬렉션 변수: `{단수}List` (예: `userList`). 복수형 변수명(`users`)은 쓰지 않는다.
+- 컬렉션 변수·DTO 의 List 필드: `{단수}List` (예: `userList`, `menuList`). 복수형(`users`)은 쓰지 않는다.
+- 조회 메서드: Controller·Service 는 `get` 접두 (`getUserList`). `find` 는 쓰지 않는다. Mapper 는 `select` 접두 (`selectUserList`).
 - 패키지 이름은 소문자만 쓴다. 언더스코어·대문자로 단어를 나누지 않는다.
 
 ## 값 다루기
@@ -30,7 +31,8 @@ Java / Spring **코드 스타일**에 적용한다.
 ## 클래스 구성
 
 - Lombok — Controller / Service: `@RequiredArgsConstructor` + `@Slf4j`.
-- Lombok — DTO: `@Getter` `@Setter` `@NoArgsConstructor` 를 기본으로 한다. 필요하면 `@Builder`, `@ToString`.
+- Lombok — DTO: `@Getter` `@Setter` `@NoArgsConstructor` `@ToString` 를 기본으로 한다. 필요하면 `@Builder`.
+- 같은 선언의 어노테이션은 위에서 아래로 Spring, OpenAPI, Lombok 이다. 없는 그룹은 건너뛴다. Spring 안에서는 스테레오타입 다음 매핑·스캔이다.
 - `@Lazy` self 주입·수동 생성자로 Lombok 생성자를 우회하지 않는다.
 - Service 필드 선언 순서: 다른 Service → 변환기(MapStruct) → 저장 포트(Mapper·Repository) → enum·상수 → 그 밖의 빈. 그룹 사이에 빈 줄을 둔다. 그룹 안은 메서드에서 쓰이는 순서.
 - Service 에 매직 값을 `private static final` 상수로 쌓지 않는다. 포맷터 등은 쓰는 메서드 안에서 만든다.
@@ -41,6 +43,7 @@ Java / Spring **코드 스타일**에 적용한다.
 - API 필수값 검증은 Bean Validation(`@Valid`, `@NotBlank` 등)으로 한다. Service 안에 수동 검증을 흩뿌리지 않는다.
 - 외부 응답을 받는 DTO 는 모르는 필드를 무시한다 (`@JsonIgnoreProperties(ignoreUnknown = true)`).
 - DTO 간 변환은 MapStruct 를 쓰고 생성자 주입으로 받는다. getter/setter 매핑 코드를 길게 직접 쓰지 않는다.
+- Controller 는 springdoc `@Tag`(name, description) 로 Swagger UI 그룹을 단다. 메서드는 `@Operation(summary, description)` 을 단다. 설명은 한국어 명사구다.
 - springdoc `@Schema` 로 설명을 달았으면 같은 설명을 Javadoc·`//` 로 중복해 쓰지 않는다.
 - record·DTO 의 `@Schema(description)` 은 컴포넌트·필드 **직전** (같은 줄 선두 또는 바로 윗줄). envelope `data`·`error` 는 JSON 키 그대로가 아니라 **의미** (예: 성공 시 결과, 실패 시 오류). `ResponseError` 의 `code`·`message` 는 코드, 메시지. `payload`·`.ai/rules/api.md` 「기계용/사람용」 gloss 는 `@Schema`에 넣지 않는다.
 - record 헤더의 컴포넌트 목록은 생성자 매개변수와 같다. **한 줄에 담기면 한 줄**; 아래 「스타일」의 메서드 시그니처 줄 나눔과 같다.
@@ -51,6 +54,7 @@ Java / Spring **코드 스타일**에 적용한다.
 - 한 줄에 문장 하나. 변수 선언도 한 줄에 하나.
 - `if` / `for` / `while` 본문은 한 줄이어도 중괄호를 쓴다.
 - 중괄호는 K&R (선언과 같은 줄에 `{`).
+- 타입 본문은 `{` 다음 줄과 `}` 앞 줄에 빈 줄을 둔다.
 - `else` / `catch` / `finally` 는 닫는 `}` 와 같은 줄.
 - 메서드 시그니처·호출·생성자가 한 줄에 담기 어렵거나 파라미터가 많으면 파라미터별로 줄을 나눈다.
 - `if` 조건에 `&&` 또는 `||` 가 있으면 연산자부터 다음 줄로 내린다.
@@ -58,8 +62,10 @@ Java / Spring **코드 스타일**에 적용한다.
 
 ## 메서드 흐름과 주석
 
+- 메서드 본문은 일이 일어나는 순서로 쓴다. 응답을 만드는 메서드는 `responseDto` 를 본문 맨 앞에 만든다.
 - 단계가 있는 메서드는 번호 블록 주석으로 나눈다. 번호는 0부터 시작할 수 있다.
-- 공통 앞단: `0`(필요할 때만) → `1`(파라미터 세팅) → `2`부터 업무.
+- 공통 앞단: `0`(필요할 때만) → `1`(파라미터 세팅) → `2`부터 업무. 파라미터가 없으면 `1`부터 업무다.
+- 번호 단계는 조회·세팅 같은 업무 순서다. 그 단계에 필요 없는 중간 맵·컬렉션은 두지 않는다.
 - 복잡한 단계는 `2-1`, `2-2` 를 쓴다.
 - 코드가 하는 일을 적고, 뻔한 한 줄 주석은 쓰지 않는다.
 

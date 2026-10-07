@@ -19,15 +19,15 @@ npm run format:check
 
 | 항목 | 값 |
 | --- | --- |
-| dev | `npm run dev` → `http://localhost:5173` |
-| preview | `npm run build` 후 `npm run preview` (기본 `4173`) |
+| dev | `npm run dev` → `http://localhost:3000` |
+| start | `npm run build` 후 `npm run start` (기본 `3000`) |
 | format write | `npm run format` |
 | format check | `npm run format:check` |
 
 ### 규칙
 
 - URL·프록시·dotenv: `../../../.ai/projects/labs-web.md` 「백엔드 연동 (로컬 dev)」, 「환경」.
-- 로컬 dev는 Vite 프록시를 쓴다. labs-api 직접 호출 시 CORS 설정이 필요하다.
+- 로컬 dev는 Next rewrites로 `/labs-api`를 labs-api에 넘긴다. labs-api 직접 호출 시 CORS 설정이 필요하다.
 - labs-api `./gradlew bootRun` 전제 (Docker Running).
 - IDE: monorepo 루트 Open (`../../../AGENTS.md` 「앱 (monorepo)」).
 
@@ -47,6 +47,6 @@ npm run format:check
 | 금지 | 내용 |
 | --- | --- |
 | Git·하네스 | `../../../AGENTS.md` 「건드리지 말 것」 |
-| env | `VITE_*`에 시크릿·DB 비밀번호 넣지 않는다. dotenv: `../../../.ai/projects/labs-web.md` 「환경」 |
+| env | `NEXT_PUBLIC_*`에 시크릿·DB 비밀번호 넣지 않는다. dotenv: `../../../.ai/projects/labs-web.md` 「환경」 |
 
 본문: 스택·프록시·버전 — `../../../.ai/projects/labs-web.md`

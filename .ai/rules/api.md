@@ -30,7 +30,7 @@
 - HTTP status 와 의미를 맞춘다. HTTP 200 바디만으로 실패를 표현하지 않는다.
 - Controller 성공: `ResponseEntity.ok(ApiResponse.ok(responseDto))` 또는 `ApiResponse.ok()` (payload 없음).
 - 4xx·5xx 는 `@RestControllerAdvice` 가 **동일 envelope** 로 반환한다.
-- 업무 **payload** 는 `{Feature}ResponseDto` 이다. 목록은 `{Feature}ListResponseDto` 등에 `items`, `totalCount`, 필요 시 `page`, `pageSize` 를 둔다. 다건 처리 결과는 API별 ResponseDto 를 쓴다. envelope 타입명에는 `Dto` 접미사를 붙이지 않는다 (`ApiResponse`).
+- 업무 **payload** 는 `{Feature}ListResponseDto` 또는 `{Feature}Dto` 이다. 목록 필드는 `{단수}List`, 건수는 `totalCount`, 필요 시 `page`, `pageSize` 를 둔다. 다건 처리 결과는 API별 ResponseDto 를 쓴다. envelope 타입명에는 `Dto` 접미사를 붙이지 않는다 (`ApiResponse`).
 - **전체 요청 거절** → 4xx/5xx + `error`. **일부 건 실패 리포트** → 2xx + `data` 안에 `failures` 등 (API별 DTO).
 
 ## 상태 코드

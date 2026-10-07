@@ -23,7 +23,7 @@ fail() {
 }
 
 harness_files() {
-  find . \( -path ./.git -o -name build -o -name node_modules -o -name .gradle -o -name .idea \) -prune -o -type f \( \
+  find . \( -path ./.git -o -name build -o -name node_modules -o -name .gradle -o -name .idea -o -name .next -o -name out -o -name dist \) -prune -o -type f \( \
     -path './.ai/*.md' -o \
     -name AGENTS.md -o \
     -name CLAUDE.md -o \
@@ -215,6 +215,21 @@ if [[ "${semantic_rc}" -ne 0 ]]; then
   done <<< "${semantic_err}"
 fi
 
+# 11. main @RestController declares springdoc @Tag (java.md)
+while IFS= read -r file; do
+  [[ -z "${file}" ]] && continue
+  grep -q '@Tag' "${file}" || fail "openapi" "${file}: @RestController without @Tag"
+done < <(grep -rlE '@RestController([^A-Za-z]|$)' backend --include='*.java' 2>/dev/null | grep '/src/main/java/' || true)
+
+# 12. main @Operation includes description (java.md)
+while IFS= read -r file; do
+  [[ -z "${file}" ]] && continue
+  while IFS= read -r hit; do
+    [[ -z "${hit}" ]] && continue
+    fail "openapi" "${file}:${hit}: @Operation without description"
+  done < <(grep -n '@Operation(' "${file}" | grep -v 'description' || true)
+done < <(grep -rl '@Operation(' backend --include='*.java' 2>/dev/null | grep '/src/main/java/' || true)
+
 # 5. banned patterns (grows with user corrections)
 if [[ -f "${BANNED_FILE}" ]]; then
   while IFS=$'\t' read -r pattern reason; do
@@ -222,7 +237,7 @@ if [[ -f "${BANNED_FILE}" ]]; then
     while IFS= read -r hit; do
       [[ -z "${hit}" ]] && continue
       fail "banned" "${hit} (${reason:-no reason})"
-    done < <(grep -rnF --exclude-dir=.git --exclude-dir=build --exclude-dir=node_modules --exclude-dir=.gradle --exclude-dir=.idea \
+    done < <(grep -rnF --exclude-dir=.git --exclude-dir=build --exclude-dir=node_modules --exclude-dir=.gradle --exclude-dir=.idea --exclude-dir=.next --exclude-dir=out --exclude-dir=dist \
       --exclude=banned.txt --exclude=check.sh -- "${pattern}" . 2>/dev/null)
     if [[ "${pattern}" == */* && -e "${pattern}" ]]; then
       fail "banned-path" "${pattern} exists on disk (${reason:-no reason})"

@@ -33,7 +33,7 @@ minhyuck-labs/
 ├── docs/                   소개, 경력, 프로젝트 정리
 ├── frontend/
 │   └── react/
-│       └── labs-web/           React SPA (Vite, React 19, TypeScript)
+│       └── labs-web/           React (Next.js App Router, React 19, TypeScript)
 ├── mobile/
 │   ├── android/                TO-DO
 │   └── ios/                    TO-DO
@@ -52,7 +52,7 @@ minhyuck-labs/
     - 3.2. `OS에 맞는 scripts/setup 스크립트 실행하고, 없는 JDK 25·Docker·Node.js(npm) 는 설치해 줘. (스크립트가 labs-api ./gradlew test 와 labs-web npm ci · npm run test 까지 돌린다.)`
     - 3.3. `Docker 엔진이 Running 인지 확인해 줘. 내가 직접 해야 하는 단계가 있으면 그것만 알려 줘.`
     - 3.4. `backend/java/labs-api 에서 ./gradlew bootRun 띄워서 GET http://localhost:8080/labs-api/actuator/health 가 {"status":"UP"} 인지 확인하고 종료해 줘.`
-    - 3.5. `bootRun 다시 켠 상태에서 frontend/react/labs-web 에 npm run dev 하고 http://localhost:5173 에서 백엔드 health UP 이 보이는지 확인해 줘.`
+    - 3.5. `bootRun 다시 켠 상태에서 frontend/react/labs-web 에 npm run dev 하고 http://localhost:3000 에서 홈 화면(헬스체크·그리드)이 보이는지 확인해 줘.`
 4. Setup 확인
     - 4.1. 프롬프트 입력: `setup 스크립트·./gradlew test·labs-web npm run test 가 모두 통과했고, 3.4 health 와 3.5 화면까지 확인했으면 완료, 아니면 실패. 한 단어로만 답해 줘.`
     - 4.2. 답이 `완료` 이면 Setup 완료.
@@ -92,8 +92,8 @@ minhyuck-labs/
     - 4.2. 터미널에 아래를 순서대로 입력.
         - cd frontend/react/labs-web
         - npm run dev
-    - 4.3. 터미널에 Local: http://localhost:5173/ 가 보이면 dev 서버 OK.
-    - 4.4. 브라우저가 http://localhost:5173 자동 Open. Backend health UP 이 보이면 OK.
+    - 4.3. 터미널에 Local: http://localhost:3000 이 보이면 dev 서버 OK.
+    - 4.4. 브라우저에서 http://localhost:3000 을 연다. 홈 화면이 보이면 OK.
 
 ## Version
 

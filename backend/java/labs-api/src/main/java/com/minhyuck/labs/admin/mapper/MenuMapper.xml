@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.minhyuck.labs.admin.mapper.MenuMapper">
+
+    <select id="selectMenuList" resultType="com.minhyuck.labs.admin.dto.response.MenuDto">
+        SELECT
+                MENU_ID
+              , PARENT_MENU_ID
+              , MENU_NAME
+              , MENU_PATH
+              , SORT_ORDER
+        FROM    MENU
+        WHERE   1 = 1
+        AND     USE_YN = TRUE
+    </select>
+
+</mapper>

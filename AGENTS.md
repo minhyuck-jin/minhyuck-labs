@@ -32,7 +32,7 @@
 | 미구현 표기 | `README.md` · `docs/` · 앱 표에 `생기면` · `예정` 대신 **TO-DO**만 쓴다 |
 | 앱 경로 | `{영역}/{스택}/{앱 id}` (예: `backend/java/labs-api`, `frontend/react/labs-web`). 스택 폴더만 두고 앱 id 없이 (`frontend/react` 만) 두지 않는다 |
 | IDE | monorepo **루트 clone Open** 한다. IntelliJ·Cursor **New Project**로 레포 밖에 앱을 새로 만들지 않는다 |
-| 프론트 초기화 | 레포 안 경로에서 Vite 등 CLI로 만든다. nested `AGENTS.md` · `.ai/projects/`를 먼저 맞춘다 |
+| 프론트 초기화 | 레포 안 경로에서 Next.js App Router CLI로 만든다. nested `AGENTS.md` · `.ai/projects/`를 먼저 맞춘다 |
 | 빌드 명령 | `./gradlew` · `npm run` 등은 nested `AGENTS.md`를 따른다 |
 
 본문: 스택·버전·DB — `.ai/projects/{앱}.md`
