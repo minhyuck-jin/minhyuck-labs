@@ -8,9 +8,13 @@ import type { ReactNode } from 'react'
 import {
   LuChevronDown,
   LuChevronRight,
+  LuFolder,
+  LuHouse,
   LuMenu,
   LuPanelLeftClose,
   LuSearch,
+  LuTrendingUp,
+  LuWallet,
 } from 'react-icons/lu'
 
 import { fetchMenuList } from '@/app/(default)/admin/api/menu'
@@ -39,6 +43,18 @@ function MenuLink({
       {children}
     </Link>
   )
+}
+
+const menuIconByPath: Record<string, typeof LuFolder> = {
+  '/budget': LuWallet,
+  '/invest': LuTrendingUp,
+}
+
+/** 메뉴 앞 아이콘 */
+function MenuMark({ menuPath }: { menuPath: string | null }) {
+  const Icon = (menuPath && menuIconByPath[menuPath]) || LuFolder
+
+  return <Icon className="sidebar-menu-icon" aria-hidden />
 }
 
 /** 기본 화면 사이드바 */
@@ -144,8 +160,15 @@ export function Sidebar() {
             onChange={(event) => setKeyword(event.target.value)}
           />
         </label>
+        <hr className="sidebar-divider" />
         <nav className="sidebar-nav" aria-label="메뉴">
           {errorMessage && <p className="sidebar-message">{errorMessage}</p>}
+          <MenuLink className="sidebar-menu sidebar-home" href="/">
+            <span className="sidebar-menu-body">
+              <LuHouse className="sidebar-menu-icon" aria-hidden />
+              홈
+            </span>
+          </MenuLink>
           <ul className="sidebar-menu-list">
             {visibleMenuList.map((menu) => {
               // 화면 경로가 있는 메뉴인 경우
@@ -153,7 +176,10 @@ export function Sidebar() {
                 return (
                   <li key={menu.menuId}>
                     <MenuLink className="sidebar-menu" href={menu.menuPath}>
-                      {menu.menuName}
+                      <span className="sidebar-menu-body">
+                        <MenuMark menuPath={menu.menuPath} />
+                        {menu.menuName}
+                      </span>
                     </MenuLink>
                   </li>
                 )
@@ -170,7 +196,10 @@ export function Sidebar() {
                     aria-expanded={isMenuOpen}
                     onClick={() => toggleMenu(menu.menuId)}
                   >
-                    <span>{menu.menuName}</span>
+                    <span className="sidebar-menu-body">
+                      <MenuMark menuPath={null} />
+                      <span>{menu.menuName}</span>
+                    </span>
                     {isMenuOpen ? (
                       <LuChevronDown aria-hidden />
                     ) : (

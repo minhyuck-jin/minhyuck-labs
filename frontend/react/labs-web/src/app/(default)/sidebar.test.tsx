@@ -77,6 +77,7 @@ describe('Sidebar', () => {
       'href',
       '/',
     )
+    expect(screen.getByRole('link', { name: '홈' })).toHaveAttribute('href', '/')
     expect(
       screen.queryByRole('link', { name: /메뉴 관리/ }),
     ).not.toBeInTheDocument()

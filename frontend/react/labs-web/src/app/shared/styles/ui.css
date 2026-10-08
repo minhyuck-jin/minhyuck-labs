@@ -33,15 +33,44 @@
   font-weight: 600;
 }
 
-.default-layout-content {
+.default-layout-body {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
 }
 
+.default-layout-content {
+  flex: 1;
+  min-width: 0;
+}
+
 @media (min-width: 768px) {
-  .default-layout:has(.sidebar) .default-layout-content {
+  .default-layout:has(.sidebar) .default-layout-body {
     margin-left: var(--width-sidebar);
   }
+}
+
+.header {
+  align-items: center;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  min-height: calc(3.5rem + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) calc(1rem + env(safe-area-inset-right)) 0
+    calc(1rem + env(safe-area-inset-left));
+  position: sticky;
+  top: 0;
+  z-index: 15;
+}
+
+.header-user {
+  color: var(--color-muted);
+  display: inline-flex;
+  font-size: 1.5rem;
+  line-height: 0;
 }
 
 .sidebar {
@@ -129,9 +158,15 @@
   outline: none;
 }
 
+.sidebar-divider {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 0.75rem 0.25rem 0;
+}
+
 .sidebar-nav {
   flex: 1;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -168,6 +203,25 @@
 .sidebar-menu {
   font-weight: 600;
   justify-content: space-between;
+}
+
+.sidebar-home {
+  background-color: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.sidebar-menu-body {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.sidebar-menu-icon {
+  flex-shrink: 0;
+  font-size: 1.125rem;
 }
 
 .sidebar-sub-menu {

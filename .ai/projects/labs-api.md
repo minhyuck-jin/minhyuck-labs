@@ -70,9 +70,47 @@
 | 표시 | `use_yn` `BOOLEAN`, 기본 `TRUE` |
 | 일시 | `created_at`, `updated_at`. 넣는 시점의 기본값. 고칠 때 `updated_at` 은 그 쿼리에서 갱신 |
 | 시드 | 같은 파일. 가계부 `/budget` `sort_order` 1, 투자 `/invest` `sort_order` 2. 둘 다 최상위 |
+| 코멘트 | `backend/java/labs-api/src/main/resources/db/migration/V2__common_code.sql`. 한글명 |
 
 - 자식의 부모는 최상위만 허용한다. migration·이후 저장에서 지킨다.
 - 조회는 `POST /labs-api/menus/search`. 응답은 `ApiResponse` 의 `MenuListResponseDto` (`menuList`, `totalCount`). 원소는 `MenuDto`. 하위는 `subMenuList`. 하위 메뉴 순서는 서비스에서 `sortOrder` 로 맞춘다.
+
+## code_group
+
+코드 그룹. 번호와 이름을 한 행에 둔다. 번호는 `MHL`과 숫자 3자리다.
+
+### 사실
+
+| 항목 | 값 |
+| --- | --- |
+| DDL | `backend/java/labs-api/src/main/resources/db/migration/V2__common_code.sql` |
+| 키 | `code_group` |
+| 그룹 번호 | `MHL` + 숫자 3자리 (`MHL001`~`MHL999`) |
+| 표시 | `use_yn` `BOOLEAN`, 기본 `TRUE` |
+| 일시 | `created_at`, `updated_at` |
+| 시드 | 같은 파일. `MHL001` 계좌유형 `sort_order` 1, `MHL002` 금융결제원 금융기관 공동코드 `sort_order` 2. `description`은 비움 |
+| 코멘트 | 같은 파일. 한글명 |
+
+- 그룹이 늘면 다음 번호의 행을 추가한다.
+
+## common_code
+
+그룹의 코드. 그룹명은 `code_group`에 둔다.
+
+### 사실
+
+| 항목 | 값 |
+| --- | --- |
+| DDL | `backend/java/labs-api/src/main/resources/db/migration/V2__common_code.sql` |
+| 키 | `code_group`, `code` |
+| 상위 | `code_group`. 있는 그룹만 가리킨다 |
+| 표시 | `use_yn` `BOOLEAN`, 기본 `TRUE` |
+| 일시 | `created_at`, `updated_at` |
+| 시드 | 같은 파일. `MHL001` 계좌유형 `1`~`6`. `MHL002` 금융기관. `sort_order`는 코드 숫자. 기관 `description`은 비움 |
+| 코멘트 | 같은 파일. 한글명 |
+
+- `MHL001` 설명은 유형별로 둔다. 입출금, 예적금, 대출, 외화, 연금/IRP, 증권.
+- `MHL002`에서 일반적으로 쓰이지 않는 코드는 `use_yn` `FALSE`다. `005`, `006`, `016`, `017`, `021`, `025`, `053`, `082`, `295`.
 
 ## 설정 (profile)
 

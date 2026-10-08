@@ -84,8 +84,9 @@ frontend/react/labs-web/src/app/
 ├── layout.tsx            html · body · 전역 CSS. 주소에 안 붙음
 ├── favicon.ico           탭 아이콘. Next.js가 자동 연결 (`layout.tsx` icons 없음)
 ├── (default)/            기본 틀 route group. 괄호는 주소에 안 붙음
-│   ├── layout.tsx        사이드바 + 화면
-│   ├── sidebar.tsx       로고·메뉴 검색·2단계 메뉴·접기
+│   ├── layout.tsx        사이드바 + 헤더 + 화면
+│   ├── sidebar.tsx       로고·메뉴 검색·최상단 홈·2단계 메뉴·접기
+│   ├── header.tsx        사용자 자리 아이콘
 │   ├── page.tsx          주소 `/`. 헬스체크·AG Grid 샘플
 │   ├── budget/page.tsx   주소 `/budget`
 │   ├── invest/page.tsx   주소 `/invest`
@@ -110,7 +111,7 @@ frontend/react/labs-web/src/app/
 - **CSS:** 페이지·컴포넌트 TSX 에 스타일 블록·전용 `.css` import 를 두지 않는다. `frontend/react/labs-web/src/app/shared/styles/theme.css` · `frontend/react/labs-web/src/app/shared/styles/ui.css` 에 테마·공통 class 를 모으고, TSX 는 `className` 으로 그 이름만 쓴다. 새 class 가 필요하면 `frontend/react/labs-web/src/app/shared/styles/` 에 추가한다. 반응형·iPhone Safari·Android Chrome: `.ai/rules/react.md` 「화면」.
 - **진입:** 루트 `frontend/react/labs-web/src/app/layout.tsx` 가 `html`(`lang` `ko`)·`body`·전역 CSS다. `/` 는 `frontend/react/labs-web/src/app/(default)/page.tsx`, `/budget` 은 가계부, `/invest` 는 투자. 사이드바 이동은 Next.js Link. Vitest 는 대상 TSX 옆 `*.test.tsx` (예: `frontend/react/labs-web/src/app/(default)/page.test.tsx`).
 - **패키지:** 도메인 `api/` · `types/` 와 `frontend/react/labs-web/src/app/shared/` 는 필요 시 채운다. 버튼·입력·그 조합은 `@minhyuck-labs/ui`. 화면을 넣는 경로는 `.ai/rules/react.md` 「화면」.
-- **파일명:** 화면은 `page.tsx`, 틀은 `layout.tsx`. 기본 틀과 같은 폴더에 있는 공통 틀 파일은 `sidebar.tsx`다. 그 외 camelCase (`apiResponse.ts`, `apiClient.ts`). 점 접미사(`*.types.ts`)·kebab 파일명 금지 — `.ai/rules/react.md` 「이름」. 정적 파일 이름은 담은 내용으로 짓는다. 화면 이름으로 짓지 않는다.
+- **파일명:** 화면은 `page.tsx`, 틀은 `layout.tsx`. 기본 틀과 같은 폴더에 있는 공통 틀 파일은 `sidebar.tsx` · `header.tsx`다. 그 외 camelCase (`apiResponse.ts`, `apiClient.ts`). 점 접미사(`*.types.ts`)·kebab 파일명 금지 — `.ai/rules/react.md` 「이름」. 정적 파일 이름은 담은 내용으로 짓는다. 화면 이름으로 짓지 않는다.
 - **import:** `src/` 아래 TS·TSX 는 **`@/`** 별칭 (`@` → `frontend/react/labs-web/src`). `../` 상대 import 는 쓰지 않는다.
 - **`frontend/react/labs-web/src/app/shared/api/apiClient.ts`:** **`NEXT_PUBLIC_*`·서비스 PATH 없음** — 인자 `url` 은 호출 측이 만든 **브라우저 `fetch` URL**(보통 `process.env.NEXT_PUBLIC_{서비스id}_API_PATH + '/…'`). 공개 함수 **`fetch*` 접두** (`fetchGetApi`, `fetchPostApi`, `fetchRawJson`). **`fetchGetApi` · `fetchPostApi`** — **표준(공통) API 응답** envelope (`ApiResponse` → `data`, `error` 시 `ApiRequestError`); POST 는 **`requestBody` 필수** (`JSON.stringify`). **`fetchRawJson`** — envelope 밖 **Raw JSON GET** (`.ai/rules/api.md` 「HTTP 메서드」). `RequestInit`·PUT/PATCH/DELETE 는 두지 않는다. PATH·멀티 백엔드 조립은 **도메인 `api/`** 만.
 
@@ -133,6 +134,6 @@ frontend/react/labs-web/src/app/
 - UI 키트 (MUI, Tailwind 등).
 - E2E (Playwright 등).
 - CI workflow.
-- 기본 틀의 `header.tsx` · `footer.tsx`.
+- 기본 틀의 `footer.tsx`.
 
 정하면 이 파일과 `package.json` 을 같은 작업에서 갱신한다.
